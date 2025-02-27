@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the application
     initApp();
+    //initMap();
 });
 
 function initApp() {
@@ -86,7 +87,7 @@ function setupEventListeners() {
 
 // Placeholder functions for future implementation
 
-function simulateMapLoading() {
+/*function simulateMapLoading() {
     console.log('Map loading simulation started');
     const mapPlaceholder = document.querySelector('.map-placeholder');
     
@@ -94,7 +95,39 @@ function simulateMapLoading() {
     setTimeout(() => {
         mapPlaceholder.innerHTML = 'Map Loaded Successfully';
     }, 1000);
+}*/
+
+function initMap() {
+    console.log("Initializing Google Maps...");
+
+    const campusBounds = {
+        north: 9.583028404957322,
+        south: 9.575654678818106,
+        west: 76.61873808921429,
+        east: 76.62843695609196,
+    };
+
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 9.578921783001265, lng: 76.62335996504986 },
+        zoom: 1,
+        mapTypeId: "satellite", // Fixed this line
+        restriction: {
+            latLngBounds: campusBounds,
+            strictBounds: true,
+        },
+    });
+
+    // Add a marker for a sample location (e.g., main entrance)
+    const marker = new google.maps.Marker({
+        position: { lat: 9.576259947356398, lng: 76.62243243927207 }, // Example coordinates
+        map: map,
+        title: "Campus Entrance"
+    });
+
+    console.log("Google Map initialized!");
 }
+
+
 
 function filterResources(filterType) {
     console.log(`Filtering resources by: ${filterType}`);

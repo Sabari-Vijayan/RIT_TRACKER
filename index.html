@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusCompass - Smart Navigation & Resource Finder</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU0evauFMqaPzWsVjM8fiU7wibr8loJiw&callback=initMap" async defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -45,7 +46,7 @@
         
         <!-- Map View -->
         <div class="map-container">
-            <div class="map-placeholder">Interactive Campus Map</div>
+            <div class="map-placeholder" id="map">Interactive Campus Map</div>
             
             <!-- Map Controls -->
             <div class="map-controls">
