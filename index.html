@@ -2,166 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusCompass - Smart Navigation & Resource Finder</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU0evauFMqaPzWsVjM8fiU7wibr8loJiw&callback=initMap" async defer></script>
+    <title>Basic 360° Tour</title>
+    <!-- Include Pannellum CSS -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/pannellum@2.5.6/build/pannellum.css">
+    <style>
+        /* Set the size of the panorama container */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        #panorama {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">Campus<span>Compass</span></div>
-        <div class="nav-links">
-            <a href="#" class="active">Map</a>
-            <a href="#">Resources</a>
-            <a href="#">Buildings</a>
-            <a href="#">People Finder</a>
-            <a href="#">Help</a>
-        </div>
-        <div class="user-menu">
-            <div class="user-profile">U</div>
-        </div>
-    </nav>
-    
-    <!-- Main Content -->
-    <main>
-        <!-- Search Bar -->
-        <div class="search-container">
-            <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search for classrooms, facilities, people...">
-                <button class="search-btn">Search</button>
-            </div>
-            <div class="filter-options">
-                <div class="filter-chip active">All</div>
-                <div class="filter-chip">Classrooms</div>
-                <div class="filter-chip">Labs</div>
-                <div class="filter-chip">Libraries</div>
-                <div class="filter-chip">Restrooms</div>
-                <div class="filter-chip">Food</div>
-                <div class="filter-chip">Sanitary</div>
-                <div class="filter-chip">Faculty</div>
-                <div class="filter-chip">Study Spaces</div>
-            </div>
-        </div>
-        
-        <!-- Map View -->
-        <div class="map-container">
-            <div class="map-placeholder" id="map">Interactive Campus Map</div>
-            
-            <!-- Map Controls -->
-            <div class="map-controls">
-                <div class="map-control-btn">+</div>
-                <div class="map-control-btn">−</div>
-                <div class="map-control-btn">🔍</div>
-                <div class="map-control-btn">📍</div>
-            </div>
-            
-            <!-- Map Layers -->
-            <div class="map-layers">
-                <div class="map-layers-title">Layers</div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-buildings" checked>
-                    <label for="layer-buildings">Buildings</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-paths" checked>
-                    <label for="layer-paths">Paths</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-facilities">
-                    <label for="layer-facilities">Facilities</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-people">
-                    <label for="layer-people">People</label>
-                </div>
-            </div>
-            
-            <!-- Floor Selector -->
-            <div class="floor-selector">
-                <button class="floor-btn">G</button>
-                <button class="floor-btn active">1</button>
-                <button class="floor-btn">2</button>
-                <button class="floor-btn">3</button>
-                <button class="floor-btn">4</button>
-            </div>
-        </div>
-        
-        <!-- Resource List -->
-        <div class="resource-list">
-            <div class="resource-list-header">
-                <h2>Nearby Resources</h2>
-                <select>
-                    <option>Distance</option>
-                    <option>Availability</option>
-                    <option>Popularity</option>
-                </select>
-            </div>
-            <div class="resource-grid">
-                <!-- Resource Card -->
-                <div class="resource-card">
-                    <div class="resource-image">Room Image</div>
-                    <div class="resource-details">
-                        <div class="resource-title">Classroom 101</div>
-                        <div>Engineering Building</div>
-                        <div>50m away</div>
-                        <div class="resource-status status-available">Available</div>
-                    </div>
-                </div>
-                
-                <!-- Resource Card -->
-                <div class="resource-card">
-                    <div class="resource-image">Lab Image</div>
-                    <div class="resource-details">
-                        <div class="resource-title">Computer Lab 3</div>
-                        <div>Science Building</div>
-                        <div>120m away</div>
-                        <div class="resource-status status-busy">In Use</div>
-                    </div>
-                </div>
-                
-                <!-- Resource Card -->
-                <div class="resource-card">
-                    <div class="resource-image">Restroom Image</div>
-                    <div class="resource-details">
-                        <div class="resource-title">Restroom (All Gender)</div>
-                        <div>Student Center</div>
-                        <div>75m away</div>
-                        <div class="resource-status status-available">Available</div>
-                    </div>
-                </div>
-                
-                <!-- Resource Card -->
-                <div class="resource-card">
-                    <div class="resource-image">Room Image</div>
-                    <div class="resource-details">
-                        <div class="resource-title">Study Room 2B</div>
-                        <div>Library</div>
-                        <div>200m away</div>
-                        <div class="resource-status status-available">Available</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Placeholder for Future Features -->
-        <div class="feature-placeholder">
-            <h3>People Finder</h3>
-            <p>Find faculty and staff on campus - Coming Soon</p>
-        </div>
-        
-        <div class="feature-placeholder">
-            <h3>Event Spaces</h3>
-            <p>Discover and book event spaces - Coming Soon</p>
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <p>Smart Campus Navigation & Resource Finder © 2025</p>
-        <p>A Hackathon Project</p>
-    </footer>
 
-    <!-- JavaScript can be linked here -->
-    <script src="script.js"></script>
+<!-- Panorama container -->
+<div id="panorama"></div>
+
+<!-- Include Pannellum JS -->
+<script type="text/javascript" src="https://unpkg.com/pannellum@2.5.6/build/pannellum.js"></script>
+
+<!-- Your custom JavaScript -->
+<script type="text/javascript">
+    // Initialize the viewer with the first scene
+    var viewer = pannellum.viewer('panorama', {
+        default: {
+            firstScene: 'scene1',
+            sceneFadeDuration: 1000,
+            
+        },
+        scenes: {
+            'scene1': {
+                title: 'First Scene',
+                panorama: 'image1.jpg', // Replace with the path to your first image
+                hotSpots: [
+                    {
+                        pitch:  -7.001249516756072,      // Vertical angle
+                        yaw: 65.21417413906272,       // Horizontal angle
+                        type: 'scene',
+                        text: 'Go to Second Scene',
+                        sceneId: 'scene2'
+                    }
+                ]
+            },
+            'scene2': {
+                title: 'Second Scene',
+                panorama: 'image2.jpg', // Replace with the path to your second image
+                hotSpots: [
+                    {
+                        pitch: -12.519258066643475,
+                        yaw: 78.5227279143438,
+                        type: 'scene',
+                        text: 'Back to First Scene',
+                        sceneId: 'scene1'
+                    }
+                ]
+            }
+        }
+    });
+</script>
+
 </body>
 </html>
