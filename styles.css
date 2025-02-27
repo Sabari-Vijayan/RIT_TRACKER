@@ -427,6 +427,11 @@ main {
     justify-content: center;
     color: var(--gray);
 }
+.resource-image img {
+    width: 100%; /* Makes the image fill the container width */
+    height: 100%; /* Makes the image fill the container height */
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
 
 .resource-details {
     padding: 15px;

@@ -87,16 +87,6 @@ function setupEventListeners() {
 
 // Placeholder functions for future implementation
 
-/*function simulateMapLoading() {
-    console.log('Map loading simulation started');
-    const mapPlaceholder = document.querySelector('.map-placeholder');
-    
-    // This would be replaced with actual map loading code
-    setTimeout(() => {
-        mapPlaceholder.innerHTML = 'Map Loaded Successfully';
-    }, 1000);
-}*/
-
 function initMap() {
     console.log("Initializing Google Maps...");
 
