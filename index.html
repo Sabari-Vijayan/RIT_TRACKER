@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SabariCompass - Smart Navigation & Resource Finder</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBI3gfEXgWD0dZhXW72ggD0G29a_0Z0cA&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuGqOLV0yKtPkWiI5o0XSGhLNTlqWQcws&callback=initMap" async defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -35,6 +35,7 @@
             <div class="search-bar">
                 <input type="text" class="search-input" placeholder="Search for classrooms, facilities, people...">
                 <button class="search-btn">Search</button>
+                <div class="autocomplete-dropdown" id="autocomplete-results"></div>
             </div>
             <div class="filter-options">
                 <div class="filter-chip active">All</div>
@@ -55,43 +56,9 @@
             
             <!-- Map Controls -->
             <div class="map-controls">
-                <div class="map-control-btn">+</div>
-                <div class="map-control-btn">−</div>
-                <div class="map-control-btn">🔍</div>
-                <div class="map-control-btn">📍</div>
-            </div>
-            
-            <!-- Map Layers -->
-            <div class="map-layers">
-                <div class="map-layers-title">Layers</div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-buildings" checked>
-                    <label for="layer-buildings">Buildings</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-paths" checked>
-                    <label for="layer-paths">Paths</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-facilities">
-                    <label for="layer-facilities">Facilities</label>
-                </div>
-                <div class="layer-option">
-                    <input type="checkbox" id="layer-people">
-                    <label for="layer-people">People</label>
-                </div>
-            </div>
-            
-            <!-- Floor Selector -->
-            <div class="floor-selector">
-                <button class="floor-btn">G</button>
-                <button class="floor-btn active">1</button>
-                <button class="floor-btn">2</button>
-                <button class="floor-btn">3</button>
-                <button class="floor-btn">4</button>
             </div>
         </div>
-        
+
         <!-- Resource List -->
         <div class="resource-list">
             <div class="resource-list-header">
