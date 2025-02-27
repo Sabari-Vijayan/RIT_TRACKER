@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic 360° Tour</title>
+    <!-- Include Pannellum CSS -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/pannellum@2.5.6/build/pannellum.css">
+    <style>
+        /* Set the size of the panorama container */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        #panorama {
+            width: 100%;
+            height: 100%;
+        }
+        .custom-hotspot {
+            background-color: rgba(0, 255, 0, 0.5);  /* Green for recycling bins */
+        }
+        
+        .pnlm-hotspot {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Panorama container -->
+<div id="panorama"></div>
+
+<!-- Include Pannellum JS -->
+<script type="text/javascript" src="https://unpkg.com/pannellum@2.5.6/build/pannellum.js"></script>
+
+<!-- Your custom JavaScript -->
+<script type="text/javascript">
+    // Initialize the viewer with the first scene
+    var viewer = pannellum.viewer('panorama', {
+        default: {
+            firstScene: 'scene1',
+            sceneFadeDuration: 1000
+        },
+        scenes: {
+            'scene1': {
+                title: 'Location 1',
+                panorama: '1.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 2',
+                        sceneId: 'scene2'
+                    }
+                ]
+            },
+            'scene2': {
+                title: 'Location 2',
+                panorama: '2.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 3',
+                        sceneId: 'scene3'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 1',
+                        sceneId: 'scene1'
+                    }
+                ]
+            },
+            'scene3': {
+                title: 'Location 3',
+                panorama: '3.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 4',
+                        sceneId: 'scene4'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 2',
+                        sceneId: 'scene2'
+                    }
+                ]
+            },
+            'scene4': {
+                title: 'Location 4',
+                panorama: '4.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 24',
+                        sceneId: 'scene24'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 90,
+                        type: 'scene',
+                        text: 'Go to Location 7',
+                        sceneId: 'scene7'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 5',
+                        sceneId: 'scene5'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 270,
+                        type: 'scene',
+                        text: 'Go to Location 27',
+                        sceneId: 'scene27'
+                    }
+                ]
+            },
+            'scene5': {
+                title: 'Location 5',
+                panorama: '5.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 4',
+                        sceneId: 'scene4'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 6',
+                        sceneId: 'scene6'
+                    }
+                ]
+            },
+            'scene6': {
+                title: 'Location 6',
+                panorama: '6.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 5',
+                        sceneId: 'scene5'
+                    }
+                ]
+            },
+            'scene7': {
+                title: 'Location 7',
+                panorama: '7.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 8',
+                        sceneId: 'scene8'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 4',
+                        sceneId: 'scene4'
+                    }
+                ]
+            },
+            'scene8': {
+                title: 'Location 8',
+                panorama: '8.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 9',
+                        sceneId: 'scene9'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 7',
+                        sceneId: 'scene7'
+                    }
+                ]
+            },
+            'scene9': {
+                title: 'Location 9',
+                panorama: '9.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 10',
+                        sceneId: 'scene10'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 8',
+                        sceneId: 'scene8'
+                    }
+                ]
+            },
+            'scene10': {
+                title: 'Location 10',
+                panorama: '10.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 11',
+                        sceneId: 'scene11'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 9',
+                        sceneId: 'scene9'
+                    }
+                ]
+            },
+            'scene11': {
+                title: 'Location 11',
+                panorama: '11.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 12',
+                        sceneId: 'scene12'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 10',
+                        sceneId: 'scene10'
+                    }
+                ]
+            },
+            'scene12': {
+                title: 'Location 12',
+                panorama: '12.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 13',
+                        sceneId: 'scene13'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 90,
+                        type: 'scene',
+                        text: 'Go to Location 17',
+                        sceneId: 'scene17'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 11',
+                        sceneId: 'scene11'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 270,
+                        type: 'scene',
+                        text: 'Go to Location 26',
+                        sceneId: 'scene26'
+                    }
+                ]
+            },
+            'scene13': {
+                title: 'Location 13',
+                panorama: '13.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 14',
+                        sceneId: 'scene14'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 120,
+                        type: 'scene',
+                        text: 'Go to Location 26',
+                        sceneId: 'scene26'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 240,
+                        type: 'scene',
+                        text: 'Go to Location 12',
+                        sceneId: 'scene12'
+                    }
+                ]
+            },
+            'scene14': {
+                title: 'Location 14',
+                panorama: '14.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 13',
+                        sceneId: 'scene13'
+                    }
+                ]
+            },
+            'scene15': {
+                title: 'Location 15',
+                panorama: '15.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 20',
+                        sceneId: 'scene20'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 120,
+                        type: 'scene',
+                        text: 'Go to Location 21',
+                        sceneId: 'scene21'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 240,
+                        type: 'scene',
+                        text: 'Go to Location 22',
+                        sceneId: 'scene22'
+                    }
+                ]
+            },
+            'scene16': {
+                title: 'Location 16',
+                panorama: '16.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 21',
+                        sceneId: 'scene21'
+                    }
+                ]
+            },
+            'scene17': {
+                title: 'Location 17',
+                panorama: '17.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 18',
+                        sceneId: 'scene18'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 12',
+                        sceneId: 'scene12'
+                    }
+                ]
+            },
+            'scene18': {
+                title: 'Location 18',
+                panorama: '18.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 19',
+                        sceneId: 'scene19'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 17',
+                        sceneId: 'scene17'
+                    }
+                ]
+            },
+            'scene19': {
+                title: 'Location 19',
+                panorama: '19.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 20',
+                        sceneId: 'scene20'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 18',
+                        sceneId: 'scene18'
+                    }
+                ]
+            },
+            'scene20': {
+                title: 'Location 20',
+                panorama: '20.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 15',
+                        sceneId: 'scene15'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 19',
+                        sceneId: 'scene19'
+                    }
+                ]
+            },
+            'scene21': {
+                title: 'Location 21',
+                panorama: '21.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 15',
+                        sceneId: 'scene15'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 16',
+                        sceneId: 'scene16'
+                    }
+                ]
+            },
+            'scene22': {
+                title: 'Location 22',
+                panorama: '22.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 15',
+                        sceneId: 'scene15'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 23',
+                        sceneId: 'scene23'
+                    }
+                ]
+            },
+            'scene23': {
+                title: 'Location 23',
+                panorama: '23.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 22',
+                        sceneId: 'scene22'
+                    }
+                ]
+            },
+            'scene24': {
+                title: 'Location 24',
+                panorama: '24.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 25',
+                        sceneId: 'scene25'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 4',
+                        sceneId: 'scene4'
+                    }
+                ]
+            },
+            'scene25': {
+                title: 'Location 25',
+                panorama: '25.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 26',
+                        sceneId: 'scene26'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 24',
+                        sceneId: 'scene24'
+                    }
+                ]
+            },
+            'scene26': {
+                title: 'Location 26',
+                panorama: '26.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 12',
+                        sceneId: 'scene12'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 120,
+                        type: 'scene',
+                        text: 'Go to Location 13',
+                        sceneId: 'scene13'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 240,
+                        type: 'scene',
+                        text: 'Go to Location 25',
+                        sceneId: 'scene25'
+                    }
+                ]
+            },
+            'scene27': {
+                title: 'Location 27',
+                panorama: '27.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 28',
+                        sceneId: 'scene28'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 4',
+                        sceneId: 'scene4'
+                    }
+                ]
+            },
+            'scene28': {
+                title: 'Location 28',
+                panorama: '28.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 29',
+                        sceneId: 'scene29'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 27',
+                        sceneId: 'scene27'
+                    }
+                ]
+            },
+            'scene29': {
+                title: 'Location 29',
+                panorama: '29.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 30',
+                        sceneId: 'scene30'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 120,
+                        type: 'scene',
+                        text: 'Go to Location 32',
+                        sceneId: 'scene32'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 240,
+                        type: 'scene',
+                        text: 'Go to Location 28',
+                        sceneId: 'scene28'
+                    }
+                ]
+            },
+            'scene30': {
+                title: 'Location 30',
+                panorama: '30.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 31',
+                        sceneId: 'scene31'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 29',
+                        sceneId: 'scene29'
+                    }
+                ]
+            },
+            'scene31': {
+                title: 'Location 31',
+                panorama: '31.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 30',
+                        sceneId: 'scene30'
+                    }
+                ]
+            },
+            'scene32': {
+                title: 'Location 32',
+                panorama: '32.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 0,
+                        type: 'scene',
+                        text: 'Go to Location 33',
+                        sceneId: 'scene33'
+                    },
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 29',
+                        sceneId: 'scene29'
+                    }
+                ]
+            },
+            'scene33': {
+                title: 'Location 33',
+                panorama: '33.jpg',
+                hotSpots: [
+                    {
+                        pitch: -10,
+                        yaw: 180,
+                        type: 'scene',
+                        text: 'Go to Location 32',
+                        sceneId: 'scene32'
+                    }
+                ]
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
