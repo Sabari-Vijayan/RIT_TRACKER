@@ -1,3 +1,91 @@
+/* === DARK MODE STYLES === */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+.dark-mode .navbar {
+    background-color: #1a1a1a;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .nav-links a {
+    color: var(--light);
+}
+
+.dark-mode .nav-links a:hover,
+.dark-mode .nav-links a.active {
+    color: var(--primary);
+}
+
+.dark-mode .search-container,
+.dark-mode .map-container,
+.dark-mode .resource-list {
+    background-color: #2c3e50;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .filter-chip {
+    background-color: #444;
+    color: var(--light);
+}
+
+.dark-mode .filter-chip:hover,
+.dark-mode .filter-chip.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.dark-mode .search-input {
+    background-color: #444;
+    border-color: #555;
+    color: var(--light);
+}
+
+.dark-mode .search-btn {
+    background-color: var(--primary);
+}
+
+.dark-mode .map-control-btn {
+    background-color: #444;
+    color: var(--light);
+}
+
+.dark-mode .map-control-btn:hover {
+    background-color: #555;
+}
+
+.dark-mode .resource-card {
+    background-color: #444;
+    color: var(--light);
+}
+
+.dark-mode .resource-card:hover {
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .footer {
+    background-color: #1a1a1a;
+}
+
+/* === ICON TOGGLES FOR DARK MODE === */
+.dark-icon {
+    display: none;
+}
+
+.light-icon {
+    display: inline;
+}
+
+.dark-mode .dark-icon {
+    display: inline;
+}
+
+.dark-mode .light-icon {
+    display: none;
+}
+
+/* === EXISTING CSS BELOW === */
 :root {
     --primary: #3498db;
     --secondary: #2ecc71;
@@ -65,6 +153,55 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.dark-mode-toggle {
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%; /* Makes the button circular */
+    background-color: var(--primary); /* Uses your primary color */
+    color: white; /* Text/icon color */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    background-color: #2980b9; /* Darker shade of primary color on hover */
+    transform: scale(1.1); /* Slightly enlarges the button on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Enhances shadow on hover */
+}
+
+.dark-mode-toggle:active {
+    transform: scale(0.95); /* Slightly shrinks the button when clicked */
+}
+
+/* Icon styles */
+.dark-mode-toggle .light-icon,
+.dark-mode-toggle .dark-icon {
+    font-size: 1.2rem; /* Adjust icon size */
+    transition: opacity 0.3s;
+}
+
+.dark-mode-toggle .dark-icon {
+    display: none; /* Hide dark icon by default */
+}
+
+/* Dark mode styles for the button */
+.dark-mode .dark-mode-toggle {
+    background-color: var(--dark); /* Darker background in dark mode */
+}
+
+.dark-mode .dark-mode-toggle .light-icon {
+    display: none; /* Hide light icon in dark mode */
+}
+
+.dark-mode .dark-mode-toggle .dark-icon {
+    display: inline; /* Show dark icon in dark mode */
 }
 
 .user-profile {
@@ -342,15 +479,15 @@ main {
     .nav-links {
         display: none;
     }
-    
+
     .map-container {
         height: 350px;
     }
-    
+
     .resource-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
-    
+
     /* Mobile menu toggle could be added here */
     .mobile-menu-toggle {
         display: block;

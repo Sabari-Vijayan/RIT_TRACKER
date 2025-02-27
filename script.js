@@ -212,3 +212,22 @@ function checkResourceAvailability(resourceId) {
     console.log(`Checking availability for resource: ${resourceId}`);
     // Implementation would check real-time availability
 }
+
+// ===== DARK MODE FUNCTIONALITY =====
+document.addEventListener('DOMContentLoaded', function () {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+
+    // Check for saved user preference
+    const savedMode = localStorage.getItem('dark-mode');
+    if (savedMode === 'enabled') {
+        body.classList.add('dark-mode');
+    }
+
+    // Toggle dark mode
+    darkModeToggle.addEventListener('click', function () {
+        body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
+    });
+});
