@@ -16,16 +16,6 @@ function initApp() {
     // Set up event listeners
     setupEventListeners();
     
-    // Check for saved dark mode preference on load
-    const savedDarkMode = localStorage.getItem('dark-mode');
-    if (savedDarkMode === 'enabled') {
-        document.body.classList.add('dark-mode');
-        // Update map styles if map is initialized
-        if (map) {
-            updateMapStyles(true);
-        }
-    }
-    
     // For demo purposes - simulate loading a map if Google Maps isn't loaded yet
     if (!mapInitialized) {
         simulateMapLoading();
@@ -73,35 +63,55 @@ function initMap() {
         title: "Campus Entrance"
     });
     
-    // Add markers for the resource locations
-    addResourceMarkers();
+    const buildingIcon = {
+        url: "./images/building.png", // Path or URL to the image
+        scaledSize: new google.maps.Size(48, 48),
+        origin: new google.maps.Point(0, 0), // Adjust size as needed
+        anchor: new google.maps.Point(16, 16) // Center of the icon
+    };
+
+    addResourceMarkers(buildingIcon);
+
+    // Check for saved dark mode preference on load
+    const savedDarkMode = localStorage.getItem('dark-mode');
+    if (savedDarkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+        // Update map styles if map is initialized
+        if (map) {
+            updateMapStyles(true);
+        }
+    }
     
     console.log("Google Map initialized!");
 }
 
 // Add markers for resource locations
-function addResourceMarkers() {
+function addResourceMarkers(buildingIcon) {
     // These would be your actual building coordinates
     const resourceLocations = [
         {
             name: "Computer Science",
             position: { lat: 9.578521783001265, lng: 76.62335996504986 },
-            building: "Engineering Building"
+            building: "Engineering Building",
+            icon: buildingIcon
         },
         {
             name: "Mechanical Engineering",
             position: { lat: 9.579121783001265, lng: 76.62395996504986 },
-            building: "Engineering Building"
+            building: "Engineering Building",
+            icon: buildingIcon
         },
         {
             name: "Civil Engineering",
             position: { lat: 9.577821783001265, lng: 76.62305996504986 },
-            building: "Engineering Building"
+            building: "Engineering Building",
+            icon: buildingIcon
         },
         {
             name: "Admin Block",
             position: { lat: 9.576559947356398, lng: 76.62343243927207 },
-            building: "Administrative Building"
+            building: "Administrative Building",
+            icon: buildingIcon
         }
     ];
     
@@ -110,7 +120,16 @@ function addResourceMarkers() {
         const marker = new google.maps.Marker({
             position: location.position,
             map: map,
-            title: location.name
+            title: location.name,
+            icon: location.icon,
+            label: {
+                text: location.name, // Display the building name as a label
+                color: "#FFFFFF", // Text color (white)
+                fontSize: "16px", // Font size
+                fontWeight: "bold", // Font weight
+                className: "marker-label" // Optional: Add a CSS class for custom styling
+            },
+            labelOrigin: new google.maps.Point(16, 20),
         });
         
         // Add click event to show info and calculate routes
@@ -313,15 +332,36 @@ function setupEventListeners() {
     });
     
     // Resource cards
+    // Resource cards
     const resourceCards = document.querySelectorAll('.resource-card');
-    resourceCards.forEach(card => {
+      resourceCards.forEach(card => {
         card.addEventListener('click', function() {
-            // Get resource title
-            const resourceTitle = this.querySelector('.resource-title').textContent;
-            // Find and route to the location
-            findLocationAndRoute(resourceTitle);
-        });
+          // Get resource title
+          const resourceTitle = this.querySelector('.resource-title').textContent;
+        
+          // Define which URL to open based on the resource title
+          let targetUrl;
+          switch(resourceTitle) {
+            case "Computer Science":
+                targetUrl = "./3DMap/TECH_THRIVE_HACKATHON/1.html";
+                break;
+            case "Mechanical Engineering":
+                targetUrl = "./3DMap/sample.html";
+                break;
+            case "Civil Engineering":
+                targetUrl = "./3DMap/sample.html";
+                break;
+            case "Admin Block":
+                targetUrl = "./3DMap/sample.html";
+                break;
+            default:
+                targetUrl = "./3DMap/sample.html";
+          }
+        
+        // Open the URL in a new tab
+        window.location.href = targetUrl;
     });
+  });
     
     // Set up routing from search
     setupRoutingFromSearch();
