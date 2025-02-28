@@ -67,7 +67,8 @@ function initMap() {
         url: "./images/building.png", // Path or URL to the image
         scaledSize: new google.maps.Size(48, 48),
         origin: new google.maps.Point(0, 0), // Adjust size as needed
-        anchor: new google.maps.Point(16, 16) // Center of the icon
+        anchor: new google.maps.Point(16, 16), // Center of the icon
+        labelOrigin: new google.maps.Point(24, -10)
     };
 
     addResourceMarkers(buildingIcon);
@@ -90,13 +91,13 @@ function addResourceMarkers(buildingIcon) {
     // These would be your actual building coordinates
     const resourceLocations = [
         {
-            name: "Computer Science",
+            name: "Mechanical Engineering",
             position: { lat: 9.578521783001265, lng: 76.62335996504986 },
             building: "Engineering Building",
             icon: buildingIcon
         },
         {
-            name: "Mechanical Engineering",
+            name: "Computer Science",
             position: { lat: 9.579121783001265, lng: 76.62395996504986 },
             building: "Engineering Building",
             icon: buildingIcon
@@ -108,9 +109,9 @@ function addResourceMarkers(buildingIcon) {
             icon: buildingIcon
         },
         {
-            name: "Admin Block",
+            name: "Student Parking",
             position: { lat: 9.576559947356398, lng: 76.62343243927207 },
-            building: "Administrative Building",
+            building: "Parking Building",
             icon: buildingIcon
         }
     ];
@@ -127,9 +128,9 @@ function addResourceMarkers(buildingIcon) {
                 color: "#FFFFFF", // Text color (white)
                 fontSize: "16px", // Font size
                 fontWeight: "bold", // Font weight
-                className: "marker-label" // Optional: Add a CSS class for custom styling
+                className: "marker-label",
+                anchor: new google.maps.Point(0, -50), // Optional: Add a CSS class for custom styling
             },
-            labelOrigin: new google.maps.Point(16, 20),
         });
         
         // Add click event to show info and calculate routes
@@ -578,18 +579,16 @@ function calculateRouteToLocation(location) {
     // Center map on destination
     if (map) {
         map.setCenter(location.position);
-        map.setZoom(18); // Zoom in more
+        map.setZoom(18); 
     }
     
     // Calculate route
     calculateRoute(startPoint, location.position, location.name);
 }
 
-// Update findLocationAndRoute function to use the campusLocations array
 function findLocationAndRoute(searchTerm) {
     const normalizedTerm = searchTerm.toLowerCase();
     
-    // Find matching location
     const matchingLocation = campusLocations.find(location => 
         location.name.toLowerCase().includes(normalizedTerm) ||
         normalizedTerm.includes(location.name.toLowerCase())

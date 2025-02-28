@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic 360° Tour</title>
+    <!-- Include Pannellum CSS -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/pannellum@2.5.6/build/pannellum.css">
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Set the size of the panorama container */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        #panorama {
+            width: 100%;
+            height: 100%;
+        }
+        .custom-hotspot {
+            background-color: rgba(0, 255, 0, 0.5);  /* Green for recycling bins */
+        }
+        
+        .pnlm-hotspot {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+        }
+
+        .signpost {
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /*transition: transform 0.3s ease;*/
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .signpost:hover {
+            transform: scale(1.1);
+        }
+
+        .signpost-icon {
+            color: #4a4a4a;
+            font-size: 16px;
+        }
+
+        .signpost-text {
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        #navigationPanel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        #navigationPanel h3 {
+            margin: 0 0 15px 0;
+            color: #2196F3;
+            font-size: 16px;
+        }
+
+        #navigationPanel input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 14px;
+        }
+
+        #navigationPanel button {
+            width: 100%;
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        #navigationPanel button:hover {
+            background: #1976D2;
+        }
+
+        #pathDisplay {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #333;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .path-step {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            padding: 5px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .path-step i {
+            margin: 0 8px;
+            color: #2196F3;
+        }
+
+        .highlight {
+            background-color: rgba(33, 150, 243, 0.3) !important;
+            transition: background-color 0.3s ease;
+        }
+        
+        .current-location {
+            background-color: #e3f2fd;
+        }
+
+        #exitButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            z-index: 1000;
+        }
+
+        #exitButton:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+   <!--<div id="navigationPanel">
+        <select id="startLocation" onchange="updateCurrentLocation(this.value)">
+            <option value="">Select Current Location</option>
+        </select>
+        <select id="endLocation">
+            <option value="">Select Destination</option>
+        </select>
+        <button onclick="findPath()"><i class="fas fa-route"></i> Find Path</button>
+        <div id="pathDisplay"></div>
+    </div>-->
+
+    <!-- Exit button -->
+    <button id="exitButton" onclick="exitPage()"><i class="fas fa-sign-out-alt"></i> Exit</button>
+
+    <!-- Panorama container -->
+    <div id="panorama"></div>
+
+    <!-- Include Pannellum JS -->
+    <script type="text/javascript" src="https://unpkg.com/pannellum@2.5.6/build/pannellum.js"></script>
+
+    <!-- Your custom JavaScript -->
+    <script type="text/javascript">
+        // Create unified signpost function
+        function createTooltip(hotSpotDiv, args) {
+            hotSpotDiv.classList.add('signpost');
+            
+            // Create icon based on signpost type
+            const icon = document.createElement('i');
+            let iconClass = '';
+            let iconColor = '#4a4a4a';
+            
+            switch(args.type) {
+                case 'lab':
+                    iconClass = 'fas fa-laptop-code';
+                    iconColor = '#2196F3';
+                    break;
+                case 'classroom':
+                    iconClass = 'fas fa-door-open';
+                    break;
+                case 'faculty':
+                    iconClass = 'fas fa-user-tie';
+                    break;
+                case 'washroom':
+                    iconClass = 'fas fa-restroom';
+                    break;
+                case 'hod':
+                    iconClass = 'fas fa-user-shield';
+                    iconColor = '#4CAF50';
+                    break;
+                case 'library':
+                    iconClass = 'fas fa-book-reader';
+                    iconColor = '#9C27B0';
+                    break;
+                case 'trash':
+                    iconClass = 'fas fa-trash-alt';
+                    break;
+                default:
+                    iconClass = 'fas fa-info-circle';
+            }
+            
+            icon.className = `${iconClass} signpost-icon`;
+            icon.style.color = iconColor;
+            
+            // Create text
+            const text = document.createElement('span');
+            text.className = 'signpost-text';
+            text.textContent = args.text || 'Information';
+            
+            // Add hover effect if provided
+            if (args.hoverText) {
+                hotSpotDiv.addEventListener('mouseenter', () => {
+                    text.textContent = args.hoverText;
+                });
+                
+                hotSpotDiv.addEventListener('mouseleave', () => {
+                    text.textContent = args.text;
+                });
+            }
+            
+            // Append elements
+            hotSpotDiv.appendChild(icon);
+            hotSpotDiv.appendChild(text);
+        }
+
+        // Graph representation of the virtual tour
+        const graph = {};
+        
+        // Initialize graph from scenes
+        function initializeGraph(scenes) {
+            for (let sceneId in scenes) {
+                graph[sceneId] = [];
+                const hotSpots = scenes[sceneId].hotSpots || [];
+                hotSpots.forEach(hotSpot => {
+                    if (hotSpot.type === 'scene') {
+                        graph[sceneId].push(hotSpot.sceneId);
+                    }
+                });
+            }
+        }
+
+        // BFS implementation
+        function bfs(start, end) {
+            const queue = [[start]];
+            const visited = new Set();
+
+            while (queue.length > 0) {
+                const path = queue.shift();
+                const node = path[path.length - 1];
+
+                if (node === end) {
+                    return path;
+                }
+
+                if (!visited.has(node)) {
+                    visited.add(node);
+                    const neighbors = graph[node] || [];
+                    
+                    for (let neighbor of neighbors) {
+                        if (!visited.has(neighbor)) {
+                            queue.push([...path, neighbor]);
+                        }
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // Scene name mapping
+        const sceneNameMapping = {
+            'scene1': ['Dept'],
+            'scene2': [ 'Entrance','Car Parking'],
+            'scene3': ['Main area','Trash'],
+            'scene4': ['Junction', 'OS Lab', 'Room 107', 'Room 108'],
+            'scene5': ['Room 111', 'Faculty Room1','Trash'],
+            'scene6': ['Faculty Room2','Washroom','Trash'],
+            'scene7': ['HOD Room','Ladies Amenity'],
+            'scene8': ['Faculty Room'],
+            'scene9': [],
+            'scene10': ['Water Filter','Faculty Room3'],
+            // Add mappings for other scenes...
+        };
+
+        // Function to get scene ID from name
+        function getSceneIdFromName(name) {
+            name = name.toLowerCase().trim();
+            
+            // First check if it's a direct scene ID
+            if (viewer.getConfig().scenes[name]) {
+                return name;
+            }
+
+            // Then check alternate names
+            for (let sceneId in sceneNameMapping) {
+                if (sceneNameMapping[sceneId].some(altName => 
+                    altName.toLowerCase() === name
+                )) {
+                    return sceneId;
+                }
+            }
+            return null;
+        }
+
+        // Update findPath function to handle alternate names
+        function findPath() {
+            const startInput = document.getElementById('startLocation').value.trim();
+            const endInput = document.getElementById('endLocation').value.trim();
+            
+            const start = getSceneIdFromName(startInput);
+            const end = getSceneIdFromName(endInput);
+            
+            if (!start || !end) {
+                alert('Please enter valid locations (e.g., scene1, OS Lab, Trash)');
+                return;
+            }
+
+            const path = bfs(start, end);
+            if (path) {
+                displayPath(path);
+            } else {
+                document.getElementById('pathDisplay').innerHTML = 'No path found between these locations';
+            }
+        }
+
+        // Update displayPath to show both scene ID and alternate name
+        function displayPath(path) {
+            const pathDisplay = document.getElementById('pathDisplay');
+            pathDisplay.innerHTML = '<h4 style="margin: 0 0 10px 0;">Follow this path:</h4>';
+            
+            // Remove any existing highlights
+            const highlights = document.querySelectorAll('.highlight');
+            highlights.forEach(el => el.classList.remove('highlight'));
+            
+            path.forEach((sceneId, index) => {
+                const div = document.createElement('div');
+                div.className = 'path-step';
+                
+                // Get the primary alternate name if available
+                const altName = sceneNameMapping[sceneId] ? 
+                    ` (${sceneNameMapping[sceneId][0]})` : '';
+                
+                if (index === 0) {
+                    div.innerHTML = `<i class="fas fa-play"></i> Start at ${sceneId}${altName}`;
+                } else if (index === path.length - 1) {
+                    div.innerHTML = `<i class="fas fa-flag"></i> Arrive at ${sceneId}${altName}`;
+                } else {
+                    div.innerHTML = `<i class="fas fa-arrow-right"></i> Go to ${sceneId}${altName}`;
+                }
+                
+                if (sceneId === viewer.getScene()) {
+                    div.classList.add('current-location');
+                    if (index < path.length - 1) {
+                        const nextScene = path[index + 1];
+                        highlightNextHotspot(sceneId, nextScene);
+                    }
+                }
+                
+                pathDisplay.appendChild(div);
+            });
+        }
+
+        // Function to highlight the hotspot leading to the next scene
+        function highlightNextHotspot(currentScene, nextScene) {
+            const scene = viewer.getConfig().scenes[currentScene];
+            const hotspots = scene.hotSpots;
+            
+            hotspots.forEach((hotspot, index) => {
+                if (hotspot.type === 'scene' && hotspot.sceneId === nextScene) {
+                    // Add visual highlight to the hotspot
+                    const hotspotElement = document.querySelector(`.pnlm-hotspot:nth-child(${index + 1})`);
+                    if (hotspotElement) {
+                        hotspotElement.classList.add('highlight');
+                    }
+                }
+            });
+        }
+
+        // Initialize the viewer with the first scene
+        var viewer = pannellum.viewer('panorama', {
+            default: {
+                firstScene: 'scene1',
+                sceneFadeDuration: 1000
+            },
+            hotSpotDebug: true,
+            scenes: {
+                'scene1': {
+                    title: 'Location 1',
+                    panorama: '1.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene2',
+                            sceneId: 'scene2'
+                        }/*,
+                        {
+                            pitch: -5,
+                            yaw: -2,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'lab',
+                                text: 'OS Lab',
+                                hoverText: 'Operating Systems Laboratory'
+                            },
+                            cssClass: 'signpost'
+                        }*/
+                    ]
+                },
+                'scene2': {
+                    title: 'Location 2',
+                    panorama: '2.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -12.46781963287607,
+                            yaw: 15.31854484543085,
+                            type: 'scene',
+                            text: 'Go to scene3',
+                            sceneId: 'scene3'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene1',
+                            sceneId: 'scene1'
+                        },
+                        {
+                            pitch: -5,
+                            yaw: -2,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Leave trash here'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene3': {
+                    title: 'Location 3',
+                    panorama: '3.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene4',
+                            sceneId: 'scene4'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene2',
+                            sceneId: 'scene2'
+                        },
+                        {
+                            pitch: -7.631123256446824, yaw: -70.33289984008707,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Leave trash here'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene4': {
+                    title: 'Location 4',
+                    panorama: '4.jpg',
+                    yaw: 270,
+                    hotSpots: [
+                        {
+                            pitch: -1.4445,
+                            yaw: -109.834,
+                            type: 'scene',
+                            text: 'Go to scene24',
+                            sceneId: 'scene24'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 90,
+                            type: 'scene',
+                            text: 'Go to scene3',
+                            sceneId: 'scene3'
+                        },
+                        {
+                            pitch: -16.343349362145236,
+                            yaw: 4.1398313133352955,
+                            type: 'scene',
+                            text: 'Go to scene5',
+                            sceneId: 'scene5'
+                        },
+                        {
+                            pitch: -14.81678,
+                            yaw: -65.56548,
+                            type: 'scene',
+                            text: 'Go to scene27',
+                            sceneId: 'scene27'
+                        },
+                        {
+                            pitch: -11.578047,
+                            yaw: -168.14379,
+                            type: 'scene',
+                            text: 'Go to scene7',
+                            sceneId: 'scene7'
+                        },
+                        {
+                            pitch: 1.418915958534588, yaw: 17.85926382026605,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'lab',
+                                text: 'OS Lab',
+                                hoverText: 'Operating Systems Laboratory'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: -2.8404162440314056, yaw: -14.161166835417816,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'classroom',
+                                text: 'Room 107',
+                                hoverText: 'Third year classroom'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: 0.9294, yaw: -160.6963,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'classroom',
+                                text: 'Room 108',
+                                hoverText: 'First year classroom'
+                            },
+                            cssClass: 'signpost'
+                        },                       
+                        {
+                            pitch: -6.492259056216885, yaw: 29.265135170023235,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Fire Extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene5': {
+                    title: 'Location 5',
+                    panorama: '5.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -22.028034688718638,
+                            yaw: 113.86189245265885,
+                            type: 'scene',
+                            text: 'Go to Location 4',
+                            sceneId: 'scene4'
+                        },
+                        {
+                            pitch: -18.236846004649244,
+                            yaw: -49.98899038438973,
+                            type: 'scene',
+                            text: 'Go to Location 6',
+                            sceneId: 'scene6'
+                        },
+                        {
+                            pitch: -1.7509722777374204, yaw: -40.11873886610845,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'classroom',
+                                text: 'Room 111',
+                                hoverText: 'Second year classroom'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: -1.9459748420291525, yaw: -61.46477625630113,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: -14.093015584142057, yaw: 11.167009726179208,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Trash'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene6': {
+                    title: 'Location 6',
+                    panorama: '6.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -14.572755645616864,
+                            yaw: 173.05177950891925,
+                            type: 'scene',
+                            text: 'Go to Location 5',
+                            sceneId: 'scene5'
+                        },
+                        {
+                            pitch: -16.780719719402928, yaw: -16.430366152478715,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: 3.6246389510445156, yaw: -1.396092779910735,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'washroom',
+                                text: 'Washroom',
+                                hoverText: 'Washroom'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: -4.4423586283925465, yaw: 5.014089587044931,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Trash'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene7': {
+                    title: 'Location 7',
+                    panorama: '7.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -11.339679857056838,
+                            yaw: 23.127261154718383,
+                            type: 'scene',
+                            text: 'Go to scene8',
+                            sceneId: 'scene8'
+                        },
+                        {
+                            pitch: -16.321026793324148,
+                            yaw: -159.03183105618083,
+                            type: 'scene',
+                            text: 'Go to scene4',
+                            sceneId: 'scene4'
+                        },
+                        {
+                            pitch: 0.09177197821375242, yaw: -5.91996469746357,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'hod',
+                                text: 'HOD Room',
+                                hoverText: 'Head of Department Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch:  -1.8378188756115665, yaw: 11.585201768254784,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'amenities',
+                                text: 'Ladies Amenities',
+                                hoverText: 'Ladies Amenities'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene8': {
+                    title: 'Location 8',
+                    panorama: '8.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene9',
+                            sceneId: 'scene9'
+                        },
+                        {
+                            pitch: -12.798811483890566,
+                            yaw: 172.61796808362953,
+                            type: 'scene',
+                            text: 'Go to scene7',
+                            sceneId: 'scene7'
+                        },
+                        {
+                            pitch:  0.7368, yaw: 28.4152,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch:  -3.747, yaw: 5.567,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene9': {
+                    title: 'Location 9',
+                    panorama: '9.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene10',
+                            sceneId: 'scene10'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene8',
+                            sceneId: 'scene8'
+                        }
+                    ]
+                },
+                'scene10': {
+                    title: 'Location 10',
+                    panorama: '10.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -14.594869614796181,
+                            yaw: 3.9304002911017655,
+                            type: 'scene',
+                            text: 'Go to scene11',
+                            sceneId: 'scene11'
+                        },
+                        {
+                            pitch: -32.68765700939516,
+                            yaw: -161.54829424852977,
+                            type: 'scene',
+                            text: 'Go to scene9',
+                            sceneId: 'scene9'
+                        },                    
+                        {
+                            pitch: -11.171877016800995,
+                            yaw: 175.0577037588138,
+                            type: 'scene',
+                            text: 'Go to scene16',
+                            sceneId: 'scene16'
+                        },
+                        {
+                            pitch: -0.9374776181117829, yaw: -127.74212905565754,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Water Filter',
+                                text: 'Water Filter',
+                                hoverText: 'Water Filter'
+                            },
+                            cssClass: 'signpost'
+                        },                        {
+                            pitch: 12.367265403643152, yaw: -115.7080206884131,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        },                        {
+                            pitch: 7.11888385073989, yaw: -16.18866037887786,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene11': {
+                    title: 'Location 11',
+                    panorama: '11.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene12',
+                            sceneId: 'scene12'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene10',
+                            sceneId: 'scene10'
+                        }
+                    ]
+                },
+                'scene12': {
+                    title: 'Location 12',
+                    panorama: '12.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -12.608925192262912,
+                            yaw: 9.273829325771686,
+                            type: 'scene',
+                            text: 'Go to scene13',
+                            sceneId: 'scene13'
+                        },
+                        {
+                            pitch: -11.533401646357207,
+                            yaw: -78.08923143151785,
+                            type: 'scene',
+                            text: 'Go to scene17',
+                            sceneId: 'scene17'
+                        },
+                        {
+                            pitch: -15.182769334462945,
+                            yaw: -167.971911011276,
+                            type: 'scene',
+                            text: 'Go to scene11',
+                            sceneId: 'scene11'
+                        },
+                        {
+                            pitch: -15.616026226394382,
+                            yaw: -7.155914868277955,
+                            type: 'scene',
+                            text: 'Go to scene26',
+                            sceneId: 'scene26'
+                        },
+                        {
+                            pitch: 5.44886735686705, yaw: 24.49001394351242,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene13': {
+                    title: 'Location 13',
+                    panorama: '13.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -14.666160434802713, 
+                            yaw: -13.842366371091165,
+                            type: 'scene',
+                            text: 'Go to scene14',
+                            sceneId: 'scene14'
+                        },
+                        {
+                            pitch: -12.77538758525439, 
+                            yaw: 176.6930648826026,
+                            type: 'scene',
+                            text: 'Go to scene26',
+                            sceneId: 'scene26'
+                        },
+                        {
+                            pitch: -19.12136721705883,
+                            yaw: 164.60243582001738,
+                            type: 'scene',
+                            text: 'Go to scene12',
+                            sceneId: 'scene12'
+                        },
+                        {
+                            pitch: -11.201310065785924, yaw: 17.07054999453729,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Trash'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene14': {
+                    title: 'Location 14',
+                    panorama: '14.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -17.990186725832345,
+                            yaw: -156.0653210670538,
+                            type: 'scene',
+                            text: 'Go to scene13',
+                            sceneId: 'scene13'
+                        },
+                        {
+                            pitch: 9.791231016184556, yaw: -10.96099883500961,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'washroom',
+                                text: 'Washroom',
+                                hoverText: 'Washroom'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: -4.008810170330775, yaw: 12.042058244709423,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Trash'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene15': {
+                    title: 'Location 15',
+                    panorama: '15.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -31.53855636444325, 
+                            yaw: 154.48538702021483,
+                            type: 'scene',
+                            text: 'Go to scene20',
+                            sceneId: 'scene20'
+                        },
+                        {
+                            pitch: -28.992505213638477, 
+                            yaw: 10.08946667638287,
+                            type: 'scene',
+                            text: 'Go to scene16',
+                            sceneId: 'scene16'
+                        },
+                        {
+                            pitch: -20.538692300724072, 
+                            yaw: -142.89114801893018,
+                            type: 'scene',
+                            text: 'Go to scene22',
+                            sceneId: 'scene22'
+                        },
+                        {
+                            pitch: 13.288888774711285, yaw: -88.37541273782863,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }        
+                    ]
+                },
+                'scene16': {
+                    title: 'Location 16',
+                    panorama: '16.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -16.94162559210335, 
+                            yaw: -145.25059953278353, 
+                            type: 'scene',
+                            text: 'Go to scene15',
+                            sceneId: 'scene15'
+                        },                   
+                        {
+                            pitch: -5.54293297881395, 
+                            yaw: 27.76316062011448,
+                            type: 'scene',
+                            text: 'Go to scene10',
+                            sceneId: 'scene10'
+                        }
+                    ]
+                },
+                'scene17': {
+                    title: 'Location 17',
+                    panorama: '17.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene18',
+                            sceneId: 'scene18'
+                        },
+                        {
+                            pitch: -27.40796126369472,
+                            yaw: 179.8373018798086,
+                            type: 'scene',
+                            text: 'Go to scene12',
+                            sceneId: 'scene12'
+                        }
+                    ]
+                },
+                'scene18': {
+                    title: 'Location 18',
+                    panorama: '18.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -21.8598767341228, 
+                            yaw: 45.425251783553335,
+                            type: 'scene',
+                            text: 'Go to scene19',
+                            sceneId: 'scene19'
+                        },
+                        {
+                            pitch: -41.77248192334683, 
+                            yaw: 150.58574254604252,
+                            type: 'scene',
+                            text: 'Go to scene17',
+                            sceneId: 'scene17'
+                        }
+                    ]
+                },
+                'scene19': {
+                    title: 'Location 19',
+                    panorama: '19.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -2.9021008389244134,
+                            yaw: 88.45123315831503,
+                            type: 'scene',
+                            text: 'Go to scene20',
+                            sceneId: 'scene20'
+                        },
+                        {
+                            pitch: -44.29393723152682,
+                            yaw: -177.37611736367,
+                            type: 'scene',
+                            text: 'Go to scene18',
+                            sceneId: 'scene18'
+                        },
+                        {
+                            pitch: 11.43424135256178, yaw: 93.63119436424353,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene20': {
+                    title: 'Location 20',
+                    panorama: '20.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene15',
+                            sceneId: 'scene15'
+                        },
+                        {
+                            pitch: -34.82832663117345, 
+                            yaw: -177.87333511765723,
+                            type: 'scene',
+                            text: 'Go to scene19',
+                            sceneId: 'scene19'
+                        },
+                        {
+                            pitch: 10.02304320999174, yaw: 11.553083630820195,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene21': {
+                    title: 'Location 21',
+                    panorama: '21.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene15',
+                            sceneId: 'scene15'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene16',
+                            sceneId: 'scene16'
+                        }
+                    ]
+                },
+                'scene22': {
+                    title: 'Location 22',
+                    panorama: '22.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -18.912167304464027, 
+                            yaw: -168.4468576299461, 
+                            type: 'scene',
+                            text: 'Go to scene15',
+                            sceneId: 'scene15'
+                        },
+                        {
+                            pitch: -20.84479029938721, 
+                            yaw: -0.0059011047295634, 
+                            type: 'scene',
+                            text: 'Go to scene23',
+                            sceneId: 'scene23'
+                        }
+                    ]
+                },
+                'scene23': {
+                    title: 'Location 23',
+                    panorama: '23.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -22.091222317573656, 
+                            yaw: 29.438459148141007,
+                            type: 'scene',
+                            text: 'Go to scene22',
+                            sceneId: 'scene22'
+                        }
+                    ]
+                },
+                'scene24': {
+                    title: 'Location 24',
+                    panorama: '24.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene25',
+                            sceneId: 'scene25'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene4',
+                            sceneId: 'scene4'
+                        }
+                    ]
+                },
+                'scene25': {
+                    title: 'Location 25',
+                    panorama: '25.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene26',
+                            sceneId: 'scene26'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene24',
+                            sceneId: 'scene24'
+                        }
+                    ]
+                },
+                'scene26': {
+                    title: 'Location 26',
+                    panorama: '26.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene12',
+                            sceneId: 'scene12'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 120,
+                            type: 'scene',
+                            text: 'Go to scene13',
+                            sceneId: 'scene13'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 240,
+                            type: 'scene',
+                            text: 'Go to scene25',
+                            sceneId: 'scene25'
+                        },
+                        {
+                            pitch: 10.087679943972347, yaw: 0.4189032785792888,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher',
+                                text: 'Fire Extinguisher',
+                                hoverText: 'Fire Extinguisher'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene27': {
+                    title: 'Location 27',
+                    panorama: '27.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -33.849842490180315, 
+                            yaw: -2.0478734074658886,
+                            type: 'scene',
+                            text: 'Go to scene28',
+                            sceneId: 'scene28'
+                        },
+                        {
+                            pitch: -10,
+                            yaw: 180,
+                            type: 'scene',
+                            text: 'Go to scene4',
+                            sceneId: 'scene4'
+                        }
+                    ]
+                },
+                'scene28': {
+                    title: 'Location 28',
+                    panorama: '28.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -36.22149382826627, 
+                            yaw: -4.169247683450916, 
+                            type: 'scene',
+                            text: 'Go to scene29',
+                            sceneId: 'scene29'
+                        },
+                        {
+                            pitch: -9.915403463183186, 
+                            yaw: -138.66126174488426,
+                            type: 'scene',
+                            text: 'Go to scene27',
+                            sceneId: 'scene27'
+                        }
+                    ]
+                },
+                'scene29': {
+                    title: 'Location 29',
+                    panorama: '29.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -7.78791395040451, 
+                            yaw: -37.63735683425228,
+                            type: 'scene',
+                            text: 'Go to scene30',
+                            sceneId: 'scene30'
+                        },
+                        {
+                            pitch: -19.35723602253478, 
+                            yaw: 25.24987872695969,
+                            type: 'scene',
+                            text: 'Go to scene32',
+                            sceneId: 'scene32'
+                        },
+                        {
+                            pitch: -13.75013251280331, 
+                            yaw: -167.40421161474825,
+                            type: 'scene',
+                            text: 'Go to scene28',
+                            sceneId: 'scene28'
+                        }
+                    ]
+                },
+                'scene30': {
+                    title: 'Location 30',
+                    panorama: '30.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -10,
+                            yaw: 0,
+                            type: 'scene',
+                            text: 'Go to scene31',
+                            sceneId: 'scene31'
+                        },
+                        {
+                            pitch: -16.701212169488453, 
+                            yaw: -133.25552308042265,
+                            type: 'scene',
+                            text: 'Go to scene29',
+                            sceneId: 'scene29'
+                        },
+                        {
+                            pitch: -15.10052347831127, 
+                            yaw: -178.42394363702104,
+                            type: 'scene',
+                            text: 'Go to scene32',
+                            sceneId: 'scene32'
+                        },  
+                        {
+                            pitch: 5.716873495150686, yaw: -17.198066834287726,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'lab',
+                                text: 'MicroProcessor Lab ',
+                                hoverText: 'MicroProcessor Lab'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene31': {
+                    title: 'Location 31',
+                    panorama: '31.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -13.539294669436174, 
+                            yaw: -161.97745892861352,
+                            type: 'scene',
+                            text: 'Go to scene30',
+                            sceneId: 'scene30'
+                        },
+                        {
+                           pitch: 4.025089204035654, yaw: -136.98760252278873,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'library',
+                                text: 'Library',
+                                hoverText: 'Library'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {                     
+                            pitch: 2.053978085806157, yaw: -10.133747790896136, 
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'faculty',
+                                text: 'Faculty Room',
+                                hoverText: 'Faculty Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {                     
+                            pitch: -5.0122979490866655, yaw: 1.535638245623412,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'washroom',
+                                text: 'Washroom',
+                                hoverText: 'Washroom'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {                     
+                            pitch: -4.329769773567678, yaw: 19.710429434923384,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'trash',
+                                text: 'Trash',
+                                hoverText: 'Trash'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene32': {
+                    title: 'Location 32',
+                    panorama: '32.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -15.257323012656482, 
+                            yaw: -15.364405324972914,
+                            type: 'scene',
+                            text: 'Go to scene33',
+                            sceneId: 'scene33'
+                        },
+                        {
+                            pitch: -25.029065296679683,
+                            yaw: 95.70209343005081,
+                            type: 'scene',
+                            text: 'Go to scene29',
+                            sceneId: 'scene29'
+                        },
+                        {
+                            pitch: -19.17320258113913, 
+                            yaw: 162.66525779160938,
+                            type: 'scene',
+                            text: 'Go to scene30',
+                            sceneId: 'scene30'
+                        },
+                        {                     
+                           pitch: 7.1243246637410875, yaw: 14.61565383854729,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'panel room',
+                                text: 'Panel Room',
+                                hoverText: 'Panel Room'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {                     
+                           pitch: -8.193728153172435, yaw: 38.97719218075115,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'fire extinguisher1',
+                                text: 'Fire Extinguisher1',
+                                hoverText: 'Fire Extinguisher1'
+                            },
+                            cssClass: 'signpost'
+                        }, 
+                        {                     
+                            pitch: 5.799000868563316, yaw: -169.68985256015978,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Fire Extinguisher2',
+                                text: 'Fire Extinguisher2',
+                                hoverText: 'Fire Extinguisher2'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                },
+                'scene33': {
+                    title: 'Location 33',
+                    panorama: '33.jpg',
+                    hotSpots: [
+                        {
+                            pitch: -15.748459332858083, 
+                            yaw: 172.73250350350446,
+                            type: 'scene',
+                            text: 'Go to scene32',
+                            sceneId: 'scene32'
+                        },
+                        {                     
+                           pitch: 9.593101716873708, yaw: 21.2910822212978,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'DBMS lab',
+                                text: 'DBMS Lab',
+                                hoverText: 'DBMS Lab'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {                     
+                           pitch: -2.170076175955597, yaw: -1.3972462231599962,
+                            type: 'info',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Water Filter',
+                                text: 'Water Filter',
+                                hoverText: 'Water Filter'
+                            },
+                            cssClass: 'signpost'
+                        }
+                    ]
+                }
+            }
+        });
+
+        // Initialize graph after viewer loads
+        viewer.on('load', function() {
+            initializeGraph(viewer.getConfig().scenes);
+        });
+
+        // Update current location and refresh path display
+        function updateCurrentLocation(input) {
+            const sceneId = getSceneIdFromName(input);
+            if (sceneId && viewer.getConfig().scenes[sceneId]) {
+                viewer.loadScene(sceneId);
+                const endInput = document.getElementById('endLocation').value.trim();
+                const endSceneId = getSceneIdFromName(endInput);
+                if (endSceneId && viewer.getConfig().scenes[endSceneId]) {
+                    const path = bfs(sceneId, endSceneId);
+                    if (path) {
+                        displayPath(path);
+                    }
+                }
+            } else if (input.trim()) {
+                alert('Invalid location. Please enter a valid location (e.g., scene1, OS Lab, Trash)');
+            }
+        }
+
+        function exitPage() {
+            if (confirm("Are you sure you want to exit?")) {
+                window.location.href = 'index.html'; // Replace 'homepage.html' with your actual homepage URL
+            }
+        }
+    </script>
+</body>
+</html>
