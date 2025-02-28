@@ -1,8 +1,7 @@
-// Main JavaScript file for CampusCompass application
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the application
     initApp();
-    // Google Maps will call initMap automatically with the callback
 });
 
 // Global variables for directions
@@ -11,12 +10,9 @@ let directionsService;
 let directionsRenderer;
 let mapInitialized = false;
 
-// Add this to your initApp function
 function initApp() {
-    // Set up event listeners
     setupEventListeners();
     
-    // For demo purposes - simulate loading a map if Google Maps isn't loaded yet
     if (!mapInitialized) {
         simulateMapLoading();
     }
@@ -33,30 +29,27 @@ function initMap() {
         east: 76.62843695609196,
     };
     
-    // Create the map
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 9.578921783001265, lng: 76.62335996504986 },
         zoom: 17,
         mapTypeId: "satellite",
         restriction: {
             latLngBounds: campusBounds,
-            strictBounds: false, // Changed to false to allow zooming out a bit
+            strictBounds: false, 
         },
     });
     
-    // Initialize the directions service and renderer
     directionsService = new google.maps.DirectionsService();
     directionsRenderer = new google.maps.DirectionsRenderer({
         map: map,
-        suppressMarkers: false, // Set to true if you want to use custom markers
+        suppressMarkers: false, 
         polylineOptions: {
-            strokeColor: '#4285F4', // Google blue
+            strokeColor: '#4285F4', 
             strokeWeight: 5,
             strokeOpacity: 0.8
         }
     });
     
-    // Add a marker for a sample location (e.g., main entrance)
     const entranceMarker = new google.maps.Marker({
         position: { lat: 9.576259947356398, lng: 76.62243243927207 },
         map: map,
@@ -64,20 +57,18 @@ function initMap() {
     });
     
     const buildingIcon = {
-        url: "./images/building.png", // Path or URL to the image
+        url: "./images/building.png", 
         scaledSize: new google.maps.Size(48, 48),
-        origin: new google.maps.Point(0, 0), // Adjust size as needed
-        anchor: new google.maps.Point(16, 16), // Center of the icon
+        origin: new google.maps.Point(0, 0), 
+        anchor: new google.maps.Point(16, 16), 
         labelOrigin: new google.maps.Point(24, -10)
     };
 
     addResourceMarkers(buildingIcon);
 
-    // Check for saved dark mode preference on load
     const savedDarkMode = localStorage.getItem('dark-mode');
     if (savedDarkMode === 'enabled') {
         document.body.classList.add('dark-mode');
-        // Update map styles if map is initialized
         if (map) {
             updateMapStyles(true);
         }
@@ -86,9 +77,7 @@ function initMap() {
     console.log("Google Map initialized!");
 }
 
-// Add markers for resource locations
 function addResourceMarkers(buildingIcon) {
-    // These would be your actual building coordinates
     const resourceLocations = [
         {
             name: "Mechanical Engineering",
@@ -116,7 +105,6 @@ function addResourceMarkers(buildingIcon) {
         }
     ];
     
-    // Create markers for each resource location
     resourceLocations.forEach(location => {
         const marker = new google.maps.Marker({
             position: location.position,
@@ -124,60 +112,49 @@ function addResourceMarkers(buildingIcon) {
             title: location.name,
             icon: location.icon,
             label: {
-                text: location.name, // Display the building name as a label
-                color: "#FFFFFF", // Text color (white)
-                fontSize: "16px", // Font size
-                fontWeight: "bold", // Font weight
+                text: location.name, 
+                color: "#FFFFFF", 
+                fontSize: "16px", 
+                fontWeight: "bold", 
                 className: "marker-label",
-                anchor: new google.maps.Point(0, -50), // Optional: Add a CSS class for custom styling
+                anchor: new google.maps.Point(0, -50), 
             },
         });
         
-        // Add click event to show info and calculate routes
         marker.addListener('click', () => {
             showLocationInfo(location);
         });
     });
 }
 
-// Show info about the location and offer directions
 function showLocationInfo(location) {
-    // You could create a detailed info window here
-    // For simplicity, we'll just offer directions
     if (confirm(`Would you like directions to ${location.name}?`)) {
-        // Use user's location or a default starting point
-        const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 }; // Campus entrance
+        const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 }; 
         calculateRoute(startPoint, location.position, location.name);
     }
 }
 
-// Calculate and display route between two points
 function calculateRoute(origin, destination, destinationName) {
-    // Check if directions services are initialized
     if (!directionsService || !directionsRenderer) {
         alert("Map services are still loading. Please try again in a moment.");
         return;
     }
     
-    // Request walking directions
     directionsService.route(
         {
             origin: origin,
             destination: destination,
             travelMode: google.maps.TravelMode.WALKING,
-            provideRouteAlternatives: true, // Get alternative routes
+            provideRouteAlternatives: true, 
             unitSystem: google.maps.UnitSystem.METRIC
         },
         (response, status) => {
             if (status === "OK") {
-                // Display the route on the map
                 directionsRenderer.setDirections(response);
                 
-                // Extract route information
                 const route = response.routes[0];
                 const leg = route.legs[0];
                 
-                // Show route information
                 showRouteInfo(leg, destinationName);
             } else {
                 console.error(`Directions request failed: ${status}`);
@@ -187,20 +164,16 @@ function calculateRoute(origin, destination, destinationName) {
     );
 }
 
-// Display route information to the user
 function showRouteInfo(routeLeg, destinationName) {
-    // Create or update a panel to show directions
     let directionsPanel = document.getElementById('directions-panel');
     
     if (!directionsPanel) {
-        // Create the panel if it doesn't exist
         directionsPanel = document.createElement('div');
         directionsPanel.id = 'directions-panel';
         directionsPanel.className = 'directions-panel';
         document.querySelector('.map-container').appendChild(directionsPanel);
     }
     
-    // Format and display the route information
     directionsPanel.innerHTML = `
         <div class="directions-header">
             <h3>Walking Directions to ${destinationName}</h3>
@@ -220,29 +193,24 @@ function showRouteInfo(routeLeg, destinationName) {
         </div>
     `;
     
-    // Show the panel
     directionsPanel.style.display = 'block';
 }
 
-// Close the directions panel
 function closeDirections() {
     const directionsPanel = document.getElementById('directions-panel');
     if (directionsPanel) {
         directionsPanel.style.display = 'none';
     }
     
-    // Clear the route from the map
     if (directionsRenderer) {
         directionsRenderer.set('directions', null);
     }
 }
 
-// Add a search-to-route feature
 function setupRoutingFromSearch() {
     const searchBtn = document.querySelector('.search-btn');
     const searchInput = document.querySelector('.search-input');
     
-    // Add event listener for the search button
     searchBtn.addEventListener('click', () => {
         const searchTerm = searchInput.value.trim();
         if (searchTerm) {
@@ -250,7 +218,6 @@ function setupRoutingFromSearch() {
         }
     });
     
-    // Add event listener for Enter key in search input
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const searchTerm = searchInput.value.trim();
@@ -261,12 +228,8 @@ function setupRoutingFromSearch() {
     });
 }
 
-// Find a location by name and calculate a route
 function findLocationAndRoute(searchTerm) {
-    // This is a simplified version - in a real app, you'd query a database
-    // or use Google Places API to find the location
     
-    // Sample mapping of search terms to locations
     const locationMap = {
         "computer science": { lat: 9.578521783001265, lng: 76.62335996504986, name: "Computer Science" },
         "mechanical engineering": { lat: 9.579121783001265, lng: 76.62395996504986, name: "Mechanical Engineering" },
@@ -275,15 +238,12 @@ function findLocationAndRoute(searchTerm) {
         "entrance": { lat: 9.576259947356398, lng: 76.62243243927207, name: "Campus Entrance" }
     };
     
-    // Normalize search term (lowercase, remove extra spaces)
     const normalizedTerm = searchTerm.toLowerCase();
     
-    // Find matching location
     let found = false;
     for (const [key, location] of Object.entries(locationMap)) {
         if (key.includes(normalizedTerm) || normalizedTerm.includes(key)) {
-            // Found a match, calculate route
-            const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 }; // Campus entrance
+            const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 }; 
             calculateRoute(startPoint, location, location.name);
             found = true;
             break;
@@ -296,36 +256,30 @@ function findLocationAndRoute(searchTerm) {
 }
 
 function setupEventListeners() {
-    // Filter chips
     const filterChips = document.querySelectorAll('.filter-chip');
     filterChips.forEach(chip => {
         chip.addEventListener('click', function() {
-            // Clear active class from all chips
             filterChips.forEach(c => c.classList.remove('active'));
-            // Add active class to clicked chip
             this.classList.add('active');
             
-            // Filter resources based on selection
             filterResources(this.textContent);
         });
     });
     
-    // Map control buttons
     const mapControls = document.querySelectorAll('.map-control-btn');
     mapControls.forEach((control, index) => {
         control.addEventListener('click', function() {
-            // Handle map controls based on index
             switch(index) {
-                case 0: // Zoom in
+                case 0: 
                     if (map) map.setZoom(map.getZoom() + 1);
                     break;
-                case 1: // Zoom out
+                case 1: 
                     if (map) map.setZoom(map.getZoom() - 1);
                     break;
-                case 2: // Reset view
+                case 2: 
                     if (map) map.setCenter({ lat: 9.578921783001265, lng: 76.62335996504986 });
                     break;
-                case 3: // Current location
+                case 3: 
                     getUserLocation();
                     break;
             }
