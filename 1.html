@@ -133,16 +133,41 @@
         .current-location {
             background-color: #e3f2fd;
         }
+
+        #exitButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            z-index: 1000;
+        }
+
+        #exitButton:hover {
+            background: #d32f2f;
+        }
     </style>
 </head>
 <body>
-    <!--<div id="navigationPanel">
-        <h3><i class="fas fa-map-marker-alt"></i> Navigation Guide</h3>
-        <input type="text" id="startLocation" placeholder="Enter location (e.g., scene1, OS Lab, Trash)" onchange="updateCurrentLocation(this.value)">
-        <input type="text" id="endLocation" placeholder="Enter destination (e.g., scene1, OS Lab, Trash)">
+   <!--<div id="navigationPanel">
+        <select id="startLocation" onchange="updateCurrentLocation(this.value)">
+            <option value="">Select Current Location</option>
+        </select>
+        <select id="endLocation">
+            <option value="">Select Destination</option>
+        </select>
         <button onclick="findPath()"><i class="fas fa-route"></i> Find Path</button>
         <div id="pathDisplay"></div>
-    </div>
+    </div>-->
+
+    <!-- Exit button -->
+    <button id="exitButton" onclick="exitPage()"><i class="fas fa-sign-out-alt"></i> Exit</button>
 
     <!-- Panorama container -->
     <div id="panorama"></div>
@@ -1519,6 +1544,12 @@
                 }
             } else if (input.trim()) {
                 alert('Invalid location. Please enter a valid location (e.g., scene1, OS Lab, Trash)');
+            }
+        }
+
+        function exitPage() {
+            if (confirm("Are you sure you want to exit?")) {
+                window.location.href = 'index.html'; // Replace 'homepage.html' with your actual homepage URL
             }
         }
     </script>
