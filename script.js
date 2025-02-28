@@ -344,7 +344,7 @@ function setupEventListeners() {
           let targetUrl;
           switch(resourceTitle) {
             case "Computer Science":
-                targetUrl = "./3DMap/TECH_THRIVE_HACKATHON/1.html";
+                targetUrl = "./3DMap/TECH_THRIVE_HACKATHON-Aadarsh/1.html";
                 break;
             case "Mechanical Engineering":
                 targetUrl = "./3DMap/sample.html";
