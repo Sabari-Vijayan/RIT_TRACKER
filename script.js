@@ -1,10 +1,7 @@
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the application
     initApp();
 });
 
-// Global variables for directions
 let map;
 let directionsService;
 let directionsRenderer;
@@ -286,15 +283,11 @@ function setupEventListeners() {
         });
     });
     
-    // Resource cards
-    // Resource cards
     const resourceCards = document.querySelectorAll('.resource-card');
       resourceCards.forEach(card => {
         card.addEventListener('click', function() {
-          // Get resource title
           const resourceTitle = this.querySelector('.resource-title').textContent;
         
-          // Define which URL to open based on the resource title
           let targetUrl;
           switch(resourceTitle) {
             case "Computer Science":
@@ -313,12 +306,10 @@ function setupEventListeners() {
                 targetUrl = "./3DMap/sample.html";
           }
         
-        // Open the URL in a new tab
         window.location.href = targetUrl;
     });
   });
     
-    // Set up routing from search
     setupRoutingFromSearch();
 
     setupDarkModeToggle();
@@ -327,54 +318,46 @@ function setupEventListeners() {
 
 }
 
-// Update map styles based on dark mode
 function updateMapStyles(isDarkMode) {
     if (isDarkMode) {
-        // Apply dark mode styles to the map
         map.setOptions({
             styles: [
                 { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-                // Add more style rules as needed
             ]
         });
     } else {
-        // Reset to default styles
         map.setOptions({ styles: [] });
     }
 }
 
-    // Dark mode toggle - add this to your setupEventListeners function
-    function setupDarkModeToggle() {
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        if (!darkModeToggle) {
-            console.error('Dark mode toggle button not found!');
-            return;
-        }
+function setupDarkModeToggle() {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (!darkModeToggle) {
+        console.error('Dark mode toggle button not found!');
+        return;
+    }
+    
+    darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
         
-        darkModeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
-            
-            // If map is initialized, update map styles for dark mode
-            if (mapInitialized && map) {
-                updateMapStyles(isDarkMode);
-            }
-        });
-        
-        // Also check for saved dark mode preference
-        const savedDarkMode = localStorage.getItem('dark-mode');
-        if (savedDarkMode === 'enabled') {
-            document.body.classList.add('dark-mode');
-            if (mapInitialized && map) {
-                updateMapStyles(true);
-            }
+        if (mapInitialized && map) {
+            updateMapStyles(isDarkMode);
         }
-      }
+    });
+    
+    const savedDarkMode = localStorage.getItem('dark-mode');
+    if (savedDarkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+        if (mapInitialized && map) {
+            updateMapStyles(true);
+        }
+    }
+}
 
-// Get user's current location
 function getUserLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -385,11 +368,9 @@ function getUserLocation() {
                 };
                 console.log('User location:', userCoords);
                 
-                // Center map on user location
                 if (map) {
                     map.setCenter(userCoords);
                     
-                    // Add a marker for the user's position
                     new google.maps.Marker({
                         position: userCoords,
                         map: map,
@@ -416,13 +397,10 @@ function getUserLocation() {
     }
 }
 
-// Filter resources (placeholder implementation)
 function filterResources(filterType) {
     console.log(`Filtering resources by: ${filterType}`);
-    // Implementation would filter the displayed resources
 }
 
-// For demo purposes - simulate loading a map
 function simulateMapLoading() {
     const mapPlaceholder = document.getElementById('map');
     if (mapPlaceholder) {
@@ -430,7 +408,6 @@ function simulateMapLoading() {
     }
 }
 
-// Campus locations database - expand this with all your locations
 const campusLocations = [
     { name: "Computer Science", category: "Department", building: "Engineering Building", position: { lat: 9.578521783001265, lng: 76.62335996504986 } },
     { name: "Mechanical Engineering", category: "Department", building: "Engineering Building", position: { lat: 9.579121783001265, lng: 76.62395996504986 } },
@@ -446,32 +423,26 @@ const campusLocations = [
     { name: "Chemistry Lab", category: "Lab", building: "Science Building", position: { lat: 9.577851783001265, lng: 76.62325996504986 } }
 ];
 
-// Set up autocomplete functionality
 function setupAutocomplete() {
     const searchInput = document.querySelector('.search-input');
     const autocompleteDropdown = document.getElementById('autocomplete-results');
     
-    // Add input event listener for real-time suggestions
     searchInput.addEventListener('input', function() {
         const searchTerm = this.value.trim().toLowerCase();
         
-        // Clear previous results
         autocompleteDropdown.innerHTML = '';
         
-        // Hide dropdown if search term is empty
         if (searchTerm === '') {
             autocompleteDropdown.style.display = 'none';
             return;
         }
         
-        // Filter locations based on search term
         const matchingLocations = campusLocations.filter(location => 
             location.name.toLowerCase().includes(searchTerm) || 
             location.category.toLowerCase().includes(searchTerm) ||
             location.building.toLowerCase().includes(searchTerm)
         );
         
-        // Display matching locations
         if (matchingLocations.length > 0) {
             matchingLocations.forEach(location => {
                 const item = document.createElement('div');
@@ -481,12 +452,10 @@ function setupAutocomplete() {
                     <div class="item-category">${location.category} - ${location.building}</div>
                 `;
                 
-                // Add click event to select this item
                 item.addEventListener('click', function() {
                     searchInput.value = location.name;
                     autocompleteDropdown.style.display = 'none';
                     
-                    // Calculate route to this location
                     calculateRouteToLocation(location);
                 });
                 
@@ -495,7 +464,6 @@ function setupAutocomplete() {
             
             autocompleteDropdown.style.display = 'block';
         } else {
-            // Show "no results" message
             const noResults = document.createElement('div');
             noResults.className = 'autocomplete-item';
             noResults.textContent = 'No matching locations found';
@@ -504,14 +472,12 @@ function setupAutocomplete() {
         }
     });
     
-    // Hide dropdown when clicking outside
     document.addEventListener('click', function(e) {
         if (!searchInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
             autocompleteDropdown.style.display = 'none';
         }
     });
     
-    // Close dropdown on Escape key
     searchInput.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             autocompleteDropdown.style.display = 'none';
@@ -519,24 +485,19 @@ function setupAutocomplete() {
     });
 }
 
-// Highlight matching part of text
 function highlightMatch(text, searchTerm) {
     const regex = new RegExp(`(${searchTerm})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
 }
 
-// Calculate route to selected location
 function calculateRouteToLocation(location) {
-    // Use user's location or a default starting point
-    const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 }; // Campus entrance
+    const startPoint = { lat: 9.576259947356398, lng: 76.62243243927207 };
     
-    // Center map on destination
     if (map) {
         map.setCenter(location.position);
         map.setZoom(18); 
     }
     
-    // Calculate route
     calculateRoute(startPoint, location.position, location.name);
 }
 
