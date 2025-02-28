@@ -1,11 +1,35 @@
-🚀 **Smart Campus Navigation & Resource Finder**  
+# 🏫 RIT Tracker  
 
-🔍 **The Problem:**  
-- Students and visitors often struggle to locate classrooms, offices, and campus facilities.  
-- Important resources like labs, study spaces, and club rooms are difficult to discover.  
-- Paper notices are outdated and provide no real-time updates on facility availability.  
-- Essential amenities such as restrooms, sanitary dispensers, and trash bins are not easy to find.  
-- Knowing who is present in a specific room (e.g., only faculty members) can help students locate the right people efficiently.  
+**Smart Campus Navigation System**  
 
-💡 **The Solution:**  
-A lightweight web/mobile app that provides real-time navigation across campus, helping students and visitors easily find classrooms, labs, libraries, and essential resources while ensuring up-to-date availability information.
+## 📌 Overview  
+RIT Tracker is a web-based navigation tool designed to help students, visitors, and faculty easily locate buildings, classrooms, and facilities within our campus. It integrates **satellite imagery** and an **interactive 3D AR view**, providing a seamless navigation experience similar to Google Street View.  
+
+## 🚀 Features  
+- 🌍 **Satellite View**: Displays campus boundaries using **Google Maps API**.  
+- 🏢 **3D AR Indoor View**: Uses **Plannellum** to create an interactive walkthrough of the CS building.  
+- 📌 **Easy Access**: No installation required—just open the web app.  
+
+## 🛠 Tech Stack  
+- **Frontend**: HTML, CSS, JavaScript  
+- **3D AR Framework**: [Plannellum](https://github.com/jgcasta/plannellum)  
+- **Maps & Satellite Imagery**: [Google Maps API](https://developers.google.com/maps)  
+- **Hosting**: GitHub Pages  
+
+## 📈 Future Plans  
+- Expanding the **3D indoor view** to cover all campus buildings.  
+- Implementing a **3D satellite view** for outdoor navigation.  
+
+## 🔗 Live Demo  
+Check out the project here: [RIT Tracker (GitHub Pages)](https://github.com/Sabari-Vijayan/TECH_THRIVE_HACKATHON/)  
+
+## 👥 Contributors  
+Created by:  
+- **Nazmin Babu Baker**  
+- **Adarsh Ajith**  
+- **Sabari Vijayan**  
+
+## 📜 License  
+This project is licensed under the **[Your Chosen License]**.  
+
+---
