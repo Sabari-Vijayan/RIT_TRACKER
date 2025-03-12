@@ -8,6 +8,23 @@ let directionsRenderer;
 let mapInitialized = false;
 
 function initApp() {
+ 
+    window.addEventListener('load', function() {
+        const loadingScreen = document.getElementById('loading');
+        if (loadingScreen) {
+            // Fade out effect
+            setTimeout(function() {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 1.5s';
+                // Remove completely after transition
+                setTimeout(function() {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }, 1000);
+        }
+    });
+
+
     setupEventListeners();
     
     if (!mapInitialized) {
