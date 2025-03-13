@@ -34,10 +34,13 @@ nav a{
   padding: 0.5rem 1rem;
   font-weight: bold;
   text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
 }
 
 nav a:hover{
-  color: yellow;
+  color: #f1683a;
+  transform: translateY(-2px);
 }
 
 body{
@@ -135,6 +138,11 @@ body{
   height: 220px;
   flex-shrink: 0;
   position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+
+.thumbnail .item:hover{
+    transform: translateY(-10px) scale(1.1);
 }
 
 .thumbnail .item img{
@@ -142,7 +150,15 @@ body{
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
 }
+
+/*.thumbnail .item img:hover{
+    transform: translateY(-5px);
+    transform: scale(1.1);
+}*/
 
 .thumbnail .item .content{
   color: #fff;
