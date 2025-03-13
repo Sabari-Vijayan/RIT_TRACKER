@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/pannellum@2.5.6/build/pannellum.css">
     <!-- Include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./loading1.css">
     <style>
         /* Set the size of the panorama container */
         html, body {
@@ -155,6 +156,11 @@
     </style>
 </head>
 <body>
+
+    <div class="loading">
+	    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMW91OTludThqdG5vOWZjY2k1bTlna2NmYXg2eXB1MzVubTl2YzZtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ycfHiJV6WZnQDFjSWH/giphy.gif" class="loading-image">
+    </div>
+
    <!--<div id="navigationPanel">
         <select id="startLocation" onchange="updateCurrentLocation(this.value)">
             <option value="">Select Current Location</option>
@@ -1549,11 +1555,32 @@
 
         function exitPage() {
           if (confirm("Are you sure you want to exit?")) {
-            window.location.href = "https://sabari-vijayan.github.io/TECH_THRIVE_HACKATHON/";
+            window.location.href = "../../index.html";
           }
         }
 
 
     </script>
+
+<script>
+    // Loading screen code here
+    window.addEventListener('load', function() {
+      // When everything is loaded (including images, scripts, styles, etc.)
+      setTimeout(function() {
+        // Get the loading screen element
+        const loadingScreen = document.querySelector('.loading');
+        
+        // Add a fade-out effect (optional)
+        loadingScreen.style.transition = 'opacity 0.5s ease';
+        loadingScreen.style.opacity = '0';
+        
+        // Remove the element from DOM after fade completes
+        setTimeout(function() {
+          loadingScreen.style.display = 'none';
+        }, 500);
+      }, 500); // Short delay for visual effect (optional)
+    });
+  </script>
+
 </body>
 </html>

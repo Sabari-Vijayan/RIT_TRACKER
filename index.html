@@ -8,10 +8,15 @@
     </title>
 
     <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./loading.css">
 
   </head>
 
   <body>
+
+    <div class="loading">
+      <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXk5Yzdkc2hib2ZzNjEyaXpzeHc2dDlrN2RqODZmanBxdWhnemYydyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VseXvvxwowwCc/giphy.gif" class="loading_image"> 
+    </div>
   
     <header>
       <div class="header-container">
@@ -43,7 +48,7 @@
 	      </div>
 	      <div class="buttons">
 	        <button>see more</button>
-	        <button>see inside</button>
+	        <button onclick="location.href='./3DMap/TECH_THRIVE_HACKATHON-Aadarsh/1.html'">see inside</button>
 	      </div>
 	    </div>
 	  </div>  
@@ -161,6 +166,26 @@
     </footer>
 
 	<script src="script.js"></script>
+
+    <script>
+        // Loading screen code here
+        window.addEventListener('load', function() {
+          // When everything is loaded (including images, scripts, styles, etc.)
+          setTimeout(function() {
+            // Get the loading screen element
+            const loadingScreen = document.querySelector('.loading');
+            
+            // Add a fade-out effect (optional)
+            loadingScreen.style.transition = 'opacity 0.5s ease';
+            loadingScreen.style.opacity = '0';
+            
+            // Remove the element from DOM after fade completes
+            setTimeout(function() {
+              loadingScreen.style.display = 'none';
+            }, 500);
+          }, 500); // Short delay for visual effect (optional)
+        });
+      </script>
 
   </body>
 

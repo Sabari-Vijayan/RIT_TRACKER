@@ -1,0 +1,20 @@
+.loading {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .loading_image {
+    height: auto;
+    width: 400px; /* Adjust based on your GIF size /
+  }
+  / Dark mode styles for loading screen */
+  .dark-mode #loading {
+    background-color: rgba(0, 0, 0, 1);
+  }
