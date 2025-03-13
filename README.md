@@ -3,20 +3,19 @@
 **Smart Campus Navigation System**  
 
 ## 📌 Overview  
-RIT Tracker is a web-based navigation tool designed to help students, visitors, and faculty easily locate buildings, classrooms, and facilities within our campus. It integrates **satellite imagery** and an **interactive 3D AR view**, providing a seamless navigation experience similar to Google Street View.  
+RIT Tracker is a web-based navigation tool designed to help students, visitors, and faculty easily locate buildings, classrooms, and facilities within our campus. It features an **interactive 3D AR view**, allowing users to explore campus buildings in detail.  
 
 ## ❓ Problem Statement  
-Navigating the campus can be challenging for students and visitors. Finding classrooms, offices, and essential facilities is often confusing, and there is no centralized system for accessing real-time information. RIT Tracker aims to solve this by providing an intuitive **smart navigation system** with **satellite mapping** and **3D walkthroughs** for easy location discovery.  
+Navigating the campus can be confusing for students and visitors, especially when trying to locate specific buildings or classrooms. RIT Tracker solves this by providing an intuitive **smart navigation system** with **3D walkthroughs**, making campus exploration seamless.  
 
 ## 🚀 Features  
-- 🌍 **Satellite View**: Displays campus boundaries using **Google Maps API**.  
-- 🏢 **3D AR Indoor View**: Uses **Plannellum** to create an interactive walkthrough of the CS building.  
+- 🏢 **3D AR Indoor View**: Uses **Plannellum** to create an interactive walkthrough of different campus buildings.  
+- 🎯 **Building Selection**: Users can choose which building they want to explore in **3D view**.  
 - 📌 **Easy Access**: No installation required—just open the web app.  
 
 ## 🛠 Tech Stack  
 - **Frontend**: HTML, CSS, JavaScript  
 - **3D AR Framework**: [Plannellum](https://github.com/jgcasta/plannellum)  
-- **Maps & Satellite Imagery**: [Google Maps API](https://developers.google.com/maps)  
 - **Hosting**: GitHub Pages  
 
 ## 🔗 Live Demo  
@@ -24,11 +23,10 @@ Check out the project here: [RIT Tracker (GitHub Pages)](https://sabari-vijayan.
 
 ## 📈 Future Plans  
 - Expanding the **3D indoor view** to cover all campus buildings.  
-- Implementing a **3D satellite view** for outdoor navigation.  
+- Adding a **VR mode** for an immersive navigation experience.  
 
 ## 🏆 Credits  
 We would like to acknowledge the following tools and resources that helped us develop this project:  
-- **[Google Maps API](https://developers.google.com/maps)** for satellite imagery and mapping services.  
 - **[Plannellum](https://github.com/jgcasta/plannellum)** for 3D AR visualization.  
 - **GitHub Pages** for free hosting.  
 - **ChatGPT** for coding assistance and debugging.  
@@ -41,5 +39,3 @@ Created by **NSACodZ**:
 
 ## 📜 License  
 This project is licensed under the **MIT License**.  
-
----
