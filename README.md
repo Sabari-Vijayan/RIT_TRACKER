@@ -1,4 +1,4 @@
-# 🏫 RIT Tracker  
+# 🏫 RIT Tracker  .
 
 **Smart Campus Navigation System**  
 
@@ -34,7 +34,7 @@ We would like to acknowledge the following tools and resources that helped us de
 ## 👥 Contributors (Team NSACodZ)  
 Created by **NSACodZ**:  
 - **Nazmin Babu Baker**  
-- **Adarsh Ajith**  
+- **Aadharsh K Ajith**  
 - **Sabari Vijayan**  
 
 ## 📜 License  
