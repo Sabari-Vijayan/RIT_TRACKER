@@ -6,15 +6,18 @@
 }
 
 header{
-  background: #508D4E;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   color: white;
   position: relative;
   z-index: 100;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
 }
 
 .header-container{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   height: 60px;
   align-items: center;
 }
@@ -27,6 +30,10 @@ header{
   text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
+nav{
+    display: flex;
+    gap: 140px;
+}
 
 nav a{
   color: white;
@@ -235,6 +242,7 @@ body{
 .carousel .list .item:nth-child(1) .content .author,
 .carousel .list .item:nth-child(1) .content .title,
 .carousel .list .item:nth-child(1) .content .topic,
+.carousel .list .item:nth-child(1) .content .building-name,
 .carousel .list .item:nth-child(1) .content .building-type,
 .carousel .list .item:nth-child(1) .content .des,
 .carousel .list .item:nth-child(1) .content .buttons
@@ -254,6 +262,9 @@ body{
 .carousel .list .item:nth-child(1) .content .title{
     animation-delay: 1.2s!important;
 }
+/*.carousel .list .item:nth-child(1) .content .building-type{
+    animation-delay: 1.2s!important;
+}*/
 .carousel .list .item:nth-child(1) .content .topic{
     animation-delay: 1.4s!important;
 }
@@ -361,6 +372,8 @@ body{
 }
 .carousel.prev .list .item:nth-child(2) .content .author,
 .carousel.prev .list .item:nth-child(2) .content .title,
+.carousel.prev .list .item:nth-child(2) .content .building-name,
+.carousel.prev .list .item:nth-child(2) .content .building-type,
 .carousel.prev .list .item:nth-child(2) .content .topic,
 .carousel.prev .list .item:nth-child(2) .content .des,
 .carousel.prev .list .item:nth-child(2) .content .buttons

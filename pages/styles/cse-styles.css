@@ -1,0 +1,113 @@
+html{
+  scroll-behavior: smooth;
+}
+
+body{
+  margin: 0;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  background: black;
+  color: white;
+}
+
+.intro{
+  position: relative;
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-shadow: rgba(255, 255, 255, 0.5);
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+.intro h2{
+  font-size: 45px;
+}
+
+.intro p{
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.intro::before{
+  content:"";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: url('../styles/images/Cs.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: brightness(50%);
+  z-index: -1;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px white,
+              -5px -5px 15px white;
+}
+
+.free-space{
+  height: 400px;
+  width: 100vw;
+}
+
+
+.timeline-container{
+  border-top: solid 3px white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: relative;
+}
+
+.timeline-line{
+  position: absolute;
+  width: 4px;
+  background-color: white;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 5px 5px 15px white,
+              -5px -5px 15px white;
+}
+
+.item{
+  display: flex;
+  position: relative;
+  margin: 30px 0;
+}
+
+.left{
+  flex-direction: row;
+}
+
+.right{
+  flex-direction: row-reverse;
+}
+
+.item-content{
+  font-size: 20px;
+  line-height: 1.6;
+  max-width: 40%;
+  border: solid 3px;
+  border-radius: 10px;
+  border-color: gray;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+   box-shadow: 5px 5px 15px white,
+              -5px -5px 15px white;
+}
+
+footer{
+  text-align: center;
+}
