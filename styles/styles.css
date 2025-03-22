@@ -11,8 +11,8 @@ header{
   color: white;
   position: relative;
   z-index: 100;
-  border-bottom-left-radius: 20%;
-  border-bottom-right-radius: 20%;
+  border-bottom-left-radius: 0%;
+  border-bottom-right-radius: 0%;
 }
 
 .header-container{
@@ -75,6 +75,7 @@ body{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: brightness(50%) blur(4px) contrast(90%);
 }
 
 .carousel .list .item .content{
@@ -94,8 +95,12 @@ body{
 .carousel .list .item .building-name{
   font-weight: bold;
   letter-spacing: 10px;
-  color: #f1683a;
+  color: white;
   text-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+}
+
+.carousel .list .item .building-type{
+    color: #f1683a;
 }
 
 .carousel .list .item .building-type,
@@ -106,7 +111,7 @@ body{
 }
 
 .carousel .list .item .topic{
-  color: #f1683a;
+  color: white;
 }
 
 .carousel .list .item .des{
@@ -177,6 +182,7 @@ body{
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
   display: inline-block;
   transition: transform 0.3s ease-in-out;
+  filter: brightness(50%);
 }
 
 /*.thumbnail .item img:hover{
@@ -225,7 +231,7 @@ body{
     font-family: monospace;
     font-weight: bold;
     transition: .5s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); 
+    box-shadow: 4px 4px 10px rgba(255, 255, 255, 0.3); 
 }
 .arrows button:hover{
     background-color: #fff;
@@ -324,7 +330,7 @@ body{
     z-index: 1000;
     width: 0%;
     height: 3px;
-    background-color: #f1683a;
+    background-color: cyan;
     left: 0;
     top: 0;
 }

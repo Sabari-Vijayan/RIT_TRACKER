@@ -11,6 +11,16 @@ body{
   color: white;
 }
 
+header{
+  font-size: 24px;
+  font-weight: bold;
+}
+
+header h2{
+  font-size: 40px;
+  font-weight: bold;
+}
+
 .intro{
   position: relative;
   color: white;
@@ -48,7 +58,7 @@ body{
   background-attachment: fixed;
   filter: brightness(50%);
   z-index: -1;
-  border-radius: 15px;
+  border-radius: 4px;
   box-shadow: 5px 5px 15px white,
               -5px -5px 15px white;
 }
@@ -70,11 +80,29 @@ body{
 .timeline-line{
   position: absolute;
   width: 4px;
-  background-color: white;
+  background-color: gray;
   top: 0;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.timeline-dot{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: red;
+  z-index: 2;
+  left: 50%;
+}
+
+.timeline-progress{
+  position: absolute;
+  width: 4px;
+  top: 0;
+  left: 50%;
+  background: white;
   box-shadow: 5px 5px 15px white,
               -5px -5px 15px white;
 }
@@ -85,12 +113,29 @@ body{
   margin: 30px 0;
 }
 
+.item-img-container{
+  height: 150px;
+  width: 150px;;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+}
+
+.item-img-container img{
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
 .left{
-  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: calc(50% + 20px);
 }
 
 .right{
-  flex-direction: row-reverse;
+  justify-content: flex-start;
+  padding-left: calc(50% + 20px);
 }
 
 .item-content{
