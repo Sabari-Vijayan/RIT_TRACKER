@@ -88,11 +88,11 @@
             right: 20px;
             width: 250px;
             height: auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 247, 247, 0.584);
             display: block;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
+            z-index: 100;
             padding: 15px;
         }
 
@@ -103,10 +103,10 @@
         }
 
         .dialog-box input {
-            width: 100%;
+            width: 90%;
             padding: 6px;
             margin: 5px 0;
-            border: 1px solid #ddd;
+            border: 1px solid #8f8d8dd4;
             border-radius: 4px;
             font-size: 13px;
         }
@@ -119,6 +119,7 @@
         .dialog-box button {
             font-size: 13px;
             padding: 6px 12px;
+            width : 90%;
         }
 
         /* Add these styles to your existing CSS */
@@ -296,10 +297,10 @@
             'scene3': ['Entrance','exit'],
             'scene4': ['Main hall', 'Trash', 'notice board', 'Main Hall', 'Notice Board'],
             'scene5': ['OS Lab', 'Operating Systems Lab', 'fire extinguisher', 'OS Laboratory'],
-            'scene6': ['Faculty Room2', 'Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room','Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
+            'scene6': ['Faculty Room2', 'Dr.Shibukumar','Vidya N','Archana M','Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room','Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
             'scene7': ['Room 106'],
             'scene8': ['HOD Room', 'Ladies Amenity', 'HOD Office', 'Room 103', '1st Year Class'],
-            'scene9': ['Faculty Room3', 'Faculty Room 3'],
+            'scene9': ['Faculty Room3', 'Faculty Room 3','Pillai Praveen Thulasidharan','Geethu Sasidharan','Alfred Thomas','Anu Bonia'],
             'scene11': ['Water Filter'],
             'scene13': ['Network Lab'],
             'scene30': ['MicroProcessor Lab', 'MP Lab', 'Microprocessor Laboratory'],
@@ -1581,11 +1582,11 @@
                             <datalist id="locations">
                                 ${generateLocationsList()}
                             </datalist>
-                            <button onclick="startNavigation()" style="width: 100%; margin-top: 5px; background: #2196F3; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
+                            <button onclick="startNavigation()" style="width: 100%; margin-top: 5px; background: #000000; color: white; border: none; padding: 6px 12px; border-radius: 20px;">
                                 Start Navigation
                             </button>
                         </div>
-                        <button onclick="showAvailableLocations()" style="width: 100%; margin-top: 5px; background: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
+                        <button onclick="showAvailableLocations()" style="width: 100%; margin-top: 5px; background: #57B4BA; color: white; border: none; padding: 6px 12px; border-radius: 20px;">
                             Show All Locations
                         </button>
                         <div id="locationInfo" style="margin-top: 10px; font-size: 11px; color: #666;">
