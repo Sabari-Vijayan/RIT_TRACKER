@@ -290,28 +290,21 @@
 
         // Scene name mapping
         const sceneNameMapping = {
-            /*'scene1': ['Dept', 'Department', 'Department Entrance'],
-            'scene2': ['Entrance', 'Car Parking', 'trash', 'exit', 'Parking Area'],
-            'scene3': ['Main hall', 'Trash', 'notice board', 'Main Hall', 'Notice Board'],
-            'scene4': ['OS Lab', 'Operating Systems Lab',  'Room 108', 'fire extinguisher', 'OS Laboratory'],
-            'scene5': ['Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
-            'scene6': ['Faculty Room2', 'Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room'],
-            'scene7': ['HOD Room', 'Ladies Amenity', 'HOD Office', 'Room 103', '1st Year Class'],
-            'scene8': ['Faculty Room3', 'Faculty Room 3'],
-            'scene30': ['MicroProcessor Lab', 'MP Lab', 'Microprocessor Laboratory'],
-            'scene31': ['Library', 'MCA Library', 'Department Library', 'Faculty Room', 'Washroom'],
-            'scene33': ['DBMS Lab', 'Database Lab', 'Water Filter', 'Database Laboratory']*/
+            
             'scene1': ['Dept', 'Department', 'Department Entrance'],
             'scene2': [ 'Car Parking', 'trash' , 'Parking Area'],
             'scene3': ['Entrance','exit'],
             'scene4': ['Main hall', 'Trash', 'notice board', 'Main Hall', 'Notice Board'],
-            'scene5': ['OS Lab', 'Operating Systems Lab',  'Room 108', 'fire extinguisher', 'OS Laboratory','Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
-            'scene6': ['Faculty Room2', 'Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room'],
-            'scene7': ['HOD Room', 'Ladies Amenity', 'HOD Office', 'Room 103', '1st Year Class'],
-            'scene8': ['Faculty Room3', 'Faculty Room 3'],
+            'scene5': ['OS Lab', 'Operating Systems Lab', 'fire extinguisher', 'OS Laboratory'],
+            'scene6': ['Faculty Room2', 'Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room','Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
+            'scene7': ['Room 106'],
+            'scene8': ['HOD Room', 'Ladies Amenity', 'HOD Office', 'Room 103', '1st Year Class'],
+            'scene9': ['Faculty Room3', 'Faculty Room 3'],
+            'scene11': ['Water Filter'],
+            'scene13': ['Network Lab'],
             'scene30': ['MicroProcessor Lab', 'MP Lab', 'Microprocessor Laboratory'],
             'scene31': ['Library', 'MCA Library', 'Department Library', 'Faculty Room', 'Washroom'],
-            'scene33': ['DBMS Lab', 'Database Lab', 'Water Filter', 'Database Laboratory']
+            'scene33': ['DBMS Lab', 'Database Lab', 'Database Laboratory']
 
             
         };
@@ -526,7 +519,7 @@
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'classroom',
-                                text: 'Room 108',
+                                text: 'Room 106',
                                 hoverText: 'First year classroom'
                             },
                             cssClass: 'signpost'
@@ -933,7 +926,7 @@
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'lab',
-                                text: 'Project Lab'
+                                text: 'Network lab'
                             },
                             cssClass: 'signpost'
                         
