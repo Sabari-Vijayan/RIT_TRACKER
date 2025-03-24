@@ -29,102 +29,30 @@
         }
 
         .signpost {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.3);
             padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            /*transition: transform 0.3s ease;*/
+            
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .signpost:hover {
-            transform: scale(1.1);
-        }
-
-        .signpost-icon {
-            color: #4a4a4a;
-            font-size: 16px;
+            /* Remove transform effect */
         }
 
         .signpost-text {
-            color: #333;
+            color: #000000;
             font-weight: bold;
             font-size: 14px;
             white-space: nowrap;
         }
 
-        #navigationPanel {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            min-width: 300px;
-        }
-
-        #navigationPanel h3 {
-            margin: 0 0 15px 0;
-            color: #2196F3;
-            font-size: 16px;
-        }
-
-        #navigationPanel input {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: white;
-            font-size: 14px;
-        }
-
-        #navigationPanel button {
-            width: 100%;
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-
-        #navigationPanel button:hover {
-            background: #1976D2;
-        }
-
-        #pathDisplay {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #333;
-            padding: 10px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .path-step {
-            display: flex;
-            align-items: center;
-            margin: 5px 0;
-            padding: 5px;
-            background: white;
-            border-radius: 4px;
-        }
-
-        .path-step i {
-            margin: 0 8px;
-            color: #2196F3;
-        }
+        
+        
 
         .highlight {
             background-color: rgba(33, 150, 243, 0.3) !important;
@@ -153,6 +81,82 @@
         #exitButton:hover {
             background: #d32f2f;
         }
+
+        .dialog-overlay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            height: auto;
+            background: rgba(255, 255, 255, 0.95);
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .dialog-box {
+            background: transparent;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .dialog-box input {
+            width: 100%;
+            padding: 6px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .dialog-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .dialog-box button {
+            font-size: 13px;
+            padding: 6px 12px;
+        }
+
+        /* Add these styles to your existing CSS */
+        #navigationPanel {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            background: rgba(20, 20, 20, 0.345);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgb(255, 255, 255);
+            width: 250px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .nav-step {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 3px solid #ccc;
+        }
+
+        .nav-step.current {
+            background: #e3f2fd;
+            border-left-color: #2196F3;
+        }
+
+        .nav-step.completed {
+            background: #f1f8e9;
+            border-left-color: #011602;
+        }
+
+        .direction-arrow {
+            margin: 0 5px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -161,17 +165,7 @@
 	    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMW91OTludThqdG5vOWZjY2k1bTlna2NmYXg2eXB1MzVubTl2YzZtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ycfHiJV6WZnQDFjSWH/giphy.gif" class="loading-image">
     </div>
 
-   <!--<div id="navigationPanel">
-        <select id="startLocation" onchange="updateCurrentLocation(this.value)">
-            <option value="">Select Current Location</option>
-        </select>
-        <select id="endLocation">
-            <option value="">Select Destination</option>
-        </select>
-        <button onclick="findPath()"><i class="fas fa-route"></i> Find Path</button>
-        <div id="pathDisplay"></div>
-    </div>-->
-
+   
     <!-- Exit button -->
     <button id="exitButton" onclick="exitPage()"><i class="fas fa-sign-out-alt"></i> Exit</button>
 
@@ -203,9 +197,13 @@
                 case 'faculty':
                     iconClass = 'fas fa-user-tie';
                     break;
-                case 'washroom':
-                    iconClass = 'fas fa-restroom';
+                case 'ladies':
+                    iconClass = 'fa-solid fa-person-dress';
                     break;
+                case 'gents':
+                    iconClass = 'fa-solid fa-person';
+                    break;
+                    
                 case 'hod':
                     iconClass = 'fas fa-user-shield';
                     iconColor = '#4CAF50';
@@ -216,6 +214,7 @@
                     break;
                 case 'trash':
                     iconClass = 'fas fa-trash-alt';
+                    iconColor = '#000000'
                     break;
                 default:
                     iconClass = 'fas fa-info-circle';
@@ -224,23 +223,23 @@
             icon.className = `${iconClass} signpost-icon`;
             icon.style.color = iconColor;
             
-            // Create text
+            
             const text = document.createElement('span');
             text.className = 'signpost-text';
             text.textContent = args.text || 'Information';
             
-            // Add hover effect if provided
+            
             if (args.hoverText) {
                 hotSpotDiv.addEventListener('mouseenter', () => {
-                    text.textContent = args.hoverText;
+                    text.innerHTML = args.hoverText.replace(/\n/g,'<br>')
                 });
                 
                 hotSpotDiv.addEventListener('mouseleave', () => {
-                    text.textContent = args.text;
+                    text.innerHTML = args.text;
                 });
             }
             
-            // Append elements
+            
             hotSpotDiv.appendChild(icon);
             hotSpotDiv.appendChild(text);
         }
@@ -268,7 +267,7 @@
 
             while (queue.length > 0) {
                 const path = queue.shift();
-                const node = path[path.length - 1];
+                const node = path[path.length-1];
 
                 if (node === end) {
                     return path;
@@ -291,17 +290,23 @@
 
         // Scene name mapping
         const sceneNameMapping = {
-            'scene1': ['Dept'],
-            'scene2': [ 'Entrance','Car Parking'],
-            'scene3': ['Main area','Trash'],
-            'scene4': ['Junction', 'OS Lab', 'Room 107', 'Room 108'],
-            'scene5': ['Room 111', 'Faculty Room1','Trash'],
-            'scene6': ['Faculty Room2','Washroom','Trash'],
-            'scene7': ['HOD Room','Ladies Amenity'],
-            'scene8': ['Faculty Room'],
-            'scene9': [],
-            'scene10': ['Water Filter','Faculty Room3'],
-            // Add mappings for other scenes...
+            
+            'scene1': ['Dept', 'Department', 'Department Entrance'],
+            'scene2': [ 'Car Parking', 'trash' , 'Parking Area'],
+            'scene3': ['Entrance','exit'],
+            'scene4': ['Main hall', 'Trash', 'notice board', 'Main Hall', 'Notice Board'],
+            'scene5': ['OS Lab', 'Operating Systems Lab', 'fire extinguisher', 'OS Laboratory'],
+            'scene6': ['Faculty Room2', 'Ladies Washroom', 'Trash', 'Faculty Room 2', 'Dr.Unnikrishnan Room','Room 111', 'Faculty Room1', 'Trash', 'Faculty Room 1', 'Second Year Class','Room 107'],
+            'scene7': ['Room 106'],
+            'scene8': ['HOD Room', 'Ladies Amenity', 'HOD Office', 'Room 103', '1st Year Class'],
+            'scene9': ['Faculty Room3', 'Faculty Room 3'],
+            'scene11': ['Water Filter'],
+            'scene13': ['Network Lab'],
+            'scene30': ['MicroProcessor Lab', 'MP Lab', 'Microprocessor Laboratory'],
+            'scene31': ['Library', 'MCA Library', 'Department Library', 'Faculty Room', 'Washroom'],
+            'scene33': ['DBMS Lab', 'Database Lab', 'Database Laboratory']
+
+            
         };
 
         // Function to get scene ID from name
@@ -322,64 +327,6 @@
                 }
             }
             return null;
-        }
-
-        // Update findPath function to handle alternate names
-        function findPath() {
-            const startInput = document.getElementById('startLocation').value.trim();
-            const endInput = document.getElementById('endLocation').value.trim();
-            
-            const start = getSceneIdFromName(startInput);
-            const end = getSceneIdFromName(endInput);
-            
-            if (!start || !end) {
-                alert('Please enter valid locations (e.g., scene1, OS Lab, Trash)');
-                return;
-            }
-
-            const path = bfs(start, end);
-            if (path) {
-                displayPath(path);
-            } else {
-                document.getElementById('pathDisplay').innerHTML = 'No path found between these locations';
-            }
-        }
-
-        // Update displayPath to show both scene ID and alternate name
-        function displayPath(path) {
-            const pathDisplay = document.getElementById('pathDisplay');
-            pathDisplay.innerHTML = '<h4 style="margin: 0 0 10px 0;">Follow this path:</h4>';
-            
-            // Remove any existing highlights
-            const highlights = document.querySelectorAll('.highlight');
-            highlights.forEach(el => el.classList.remove('highlight'));
-            
-            path.forEach((sceneId, index) => {
-                const div = document.createElement('div');
-                div.className = 'path-step';
-                
-                // Get the primary alternate name if available
-                const altName = sceneNameMapping[sceneId] ? 
-                    ` (${sceneNameMapping[sceneId][0]})` : '';
-                
-                if (index === 0) {
-                    div.innerHTML = `<i class="fas fa-play"></i> Start at ${sceneId}${altName}`;
-                } else if (index === path.length - 1) {
-                    div.innerHTML = `<i class="fas fa-flag"></i> Arrive at ${sceneId}${altName}`;
-                } else {
-                    div.innerHTML = `<i class="fas fa-arrow-right"></i> Go to ${sceneId}${altName}`;
-                }
-                
-                if (sceneId === viewer.getScene()) {
-                    div.classList.add('current-location');
-                    if (index < path.length - 1) {
-                        const nextScene = path[index + 1];
-                        highlightNextHotspot(sceneId, nextScene);
-                    }
-                }
-                
-                pathDisplay.appendChild(div);
-            });
         }
 
         // Function to highlight the hotspot leading to the next scene
@@ -416,19 +363,7 @@
                             type: 'scene',
                             text: 'Go to scene2',
                             sceneId: 'scene2'
-                        }/*,
-                        {
-                            pitch: -5,
-                            yaw: -2,
-                            type: 'info',
-                            createTooltipFunc: createTooltip,
-                            createTooltipArgs: {
-                                type: 'lab',
-                                text: 'OS Lab',
-                                hoverText: 'Operating Systems Laboratory'
-                            },
-                            cssClass: 'signpost'
-                        }*/
+                        }
                     ]
                 },
                 'scene2': {
@@ -452,7 +387,7 @@
                         {
                             pitch: -5,
                             yaw: -2,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -483,12 +418,34 @@
                         },
                         {
                             pitch: -7.631123256446824, yaw: -70.33289984008707,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
                                 text: 'Trash',
                                 hoverText: 'Leave trash here'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: 1.1097657,
+                            yaw: -45.75280,
+                            type: 'scene',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Notice',
+                                text: 'Notice Board'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch: 3.92514,
+                            yaw: 114.959635,
+                            type: 'scene',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'Notice',
+                                text: 'Notice Board'
                             },
                             cssClass: 'signpost'
                         }
@@ -536,7 +493,7 @@
                         },
                         {
                             pitch: 1.418915958534588, yaw: 17.85926382026605,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'lab',
@@ -547,7 +504,7 @@
                         },
                         {
                             pitch: -2.8404162440314056, yaw: -14.161166835417816,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'classroom',
@@ -558,18 +515,18 @@
                         },
                         {
                             pitch: 0.9294, yaw: -160.6963,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'classroom',
-                                text: 'Room 108',
+                                text: 'Room 106',
                                 hoverText: 'First year classroom'
                             },
                             cssClass: 'signpost'
                         },                       
                         {
                             pitch: -6.492259056216885, yaw: 29.265135170023235,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'Fire Extinguisher',
@@ -600,7 +557,7 @@
                         },
                         {
                             pitch: -1.7509722777374204, yaw: -40.11873886610845,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'classroom',
@@ -611,18 +568,18 @@
                         },
                         {
                             pitch: -1.9459748420291525, yaw: -61.46477625630113,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Anil Kumar S\nDr.Shibukumar K.B\nBinoj S<br>Vidya N\nAswathy B\nArchana M\nJaikumar K Kurumackel'
                             },
                             cssClass: 'signpost'
                         },
                         {
                             pitch: -14.093015584142057, yaw: 11.167009726179208,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -646,21 +603,21 @@
                         },
                         {
                             pitch: -16.780719719402928, yaw: -16.430366152478715,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Dr.Unnikrishnan'
                             },
                             cssClass: 'signpost'
                         },
                         {
                             pitch: 3.6246389510445156, yaw: -1.396092779910735,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
-                                type: 'washroom',
+                                type: 'ladies',
                                 text: 'Washroom',
                                 hoverText: 'Washroom'
                             },
@@ -668,7 +625,7 @@
                         },
                         {
                             pitch: -4.4423586283925465, yaw: 5.014089587044931,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -699,7 +656,7 @@
                         },
                         {
                             pitch: 0.09177197821375242, yaw: -5.91996469746357,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'hod',
@@ -710,12 +667,23 @@
                         },
                         {
                             pitch:  -1.8378188756115665, yaw: 11.585201768254784,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'amenities',
                                 text: 'Ladies Amenities',
                                 hoverText: 'Ladies Amenities'
+                            },
+                            cssClass: 'signpost'
+                        },
+                        {
+                            pitch:  4.834041, yaw: 14.935153,
+                            type: 'scene',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'classroom',
+                                text: 'Room 103',
+                                hoverText: '1st yr classroom'
                             },
                             cssClass: 'signpost'
                         }
@@ -741,23 +709,23 @@
                         },
                         {
                             pitch:  0.7368, yaw: 28.4152,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Dr.Raji R Pillai\nNisha K K'
                             },
                             cssClass: 'signpost'
                         },
                         {
                             pitch:  -3.747, yaw: 5.567,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Anu Bonia Francis\nPillai Praveen Thulasidharan\nAlfred Thomas\nGeethu Sasidharan'
                             },
                             cssClass: 'signpost'
                         }
@@ -810,7 +778,9 @@
                         },
                         {
                             pitch: -0.9374776181117829, yaw: -127.74212905565754,
-                            type: 'info',
+                            type: 'scene',
+                            text: 'Go to Water Filter',
+                            sceneId: 'scene10',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'Water Filter',
@@ -818,24 +788,30 @@
                                 hoverText: 'Water Filter'
                             },
                             cssClass: 'signpost'
-                        },                        {
+                        },
+                        {
                             pitch: 12.367265403643152, yaw: -115.7080206884131,
-                            type: 'info',
+                            type: 'scene',
+                            text: 'Go to Faculty Room',
+                            sceneId: 'scene10',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Vineetha S\nDr.John C John'
                             },
                             cssClass: 'signpost'
-                        },                        {
+                        },
+                        {
                             pitch: 7.11888385073989, yaw: -16.18866037887786,
-                            type: 'info',
+                            type: 'scene',
+                            text: 'Go to Faculty Room',
+                            sceneId: 'scene10',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
                                 text: 'Faculty Room',
-                                hoverText: 'Faculty Room'
+                                hoverText: 'Jincy Kuriakose'
                             },
                             cssClass: 'signpost'
                         }
@@ -858,6 +834,42 @@
                             type: 'scene',
                             text: 'Go to scene10',
                             sceneId: 'scene10'
+                        },
+                        {
+                            pitch: 3.344224, yaw: -37.96696,
+                            type: 'scene',
+                            text: 'Go to Room 207',
+                            sceneId: 'scene11',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'classroom',
+                                text: 'Room 207'
+                            },
+                            cssClass: 'signpost'
+                        },  
+                        {
+                            pitch: 8.482667, yaw: 24.410818,
+                            type: 'scene',
+                            text: 'Go to Project Lab',
+                            sceneId: 'scene11',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'lab',
+                                text: 'Project Lab'
+                            },
+                            cssClass: 'signpost'
+                        },  
+                        {
+                            pitch: 3.0468583, yaw: 7.994178,
+                            type: 'scene',
+                            text: 'Go to MCA HOD',
+                            sceneId: 'scene11',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'hod',
+                                text: 'MCA HOD'
+                            },
+                            cssClass: 'signpost'
                         }
                     ]
                 },
@@ -895,7 +907,9 @@
                         },
                         {
                             pitch: 5.44886735686705, yaw: 24.49001394351242,
-                            type: 'info',
+                            type: 'scene',
+                            text: 'Go to Fire Extinguisher',
+                            sceneId: 'scene12',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher',
@@ -903,6 +917,19 @@
                                 hoverText: 'Fire Extinguisher'
                             },
                             cssClass: 'signpost'
+                        },
+                        {
+                             
+                        
+                            pitch: 8.482667, yaw: 24.410818,
+                            type: 'scene',
+                            createTooltipFunc: createTooltip,
+                            createTooltipArgs: {
+                                type: 'lab',
+                                text: 'Network lab'
+                            },
+                            cssClass: 'signpost'
+                        
                         }
                     ]
                 },
@@ -933,7 +960,9 @@
                         },
                         {
                             pitch: -11.201310065785924, yaw: 17.07054999453729,
-                            type: 'info',
+                            type: 'scene',
+                            text: 'Go to Trash',
+                            sceneId: 'scene13',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -957,7 +986,7 @@
                         },
                         {
                             pitch: 9.791231016184556, yaw: -10.96099883500961,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'washroom',
@@ -968,7 +997,7 @@
                         },
                         {
                             pitch: -4.008810170330775, yaw: 12.042058244709423,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -1006,7 +1035,7 @@
                         },
                         {
                             pitch: 13.288888774711285, yaw: -88.37541273782863,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher',
@@ -1097,7 +1126,7 @@
                         },
                         {
                             pitch: 11.43424135256178, yaw: 93.63119436424353,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher',
@@ -1128,7 +1157,7 @@
                         },
                         {
                             pitch: 10.02304320999174, yaw: 11.553083630820195,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher',
@@ -1259,7 +1288,7 @@
                         },
                         {
                             pitch: 10.087679943972347, yaw: 0.4189032785792888,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher',
@@ -1364,7 +1393,7 @@
                         },  
                         {
                             pitch: 5.716873495150686, yaw: -17.198066834287726,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'lab',
@@ -1388,7 +1417,7 @@
                         },
                         {
                            pitch: 4.025089204035654, yaw: -136.98760252278873,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'library',
@@ -1399,7 +1428,7 @@
                         },
                         {                     
                             pitch: 2.053978085806157, yaw: -10.133747790896136, 
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'faculty',
@@ -1410,7 +1439,7 @@
                         },
                         {                     
                             pitch: -5.0122979490866655, yaw: 1.535638245623412,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'washroom',
@@ -1421,7 +1450,7 @@
                         },
                         {                     
                             pitch: -4.329769773567678, yaw: 19.710429434923384,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'trash',
@@ -1459,7 +1488,7 @@
                         },
                         {                     
                            pitch: 7.1243246637410875, yaw: 14.61565383854729,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'panel room',
@@ -1470,7 +1499,7 @@
                         },
                         {                     
                            pitch: -8.193728153172435, yaw: 38.97719218075115,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'fire extinguisher1',
@@ -1481,7 +1510,7 @@
                         }, 
                         {                     
                             pitch: 5.799000868563316, yaw: -169.68985256015978,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'Fire Extinguisher2',
@@ -1505,7 +1534,7 @@
                         },
                         {                     
                            pitch: 9.593101716873708, yaw: 21.2910822212978,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'DBMS lab',
@@ -1516,7 +1545,7 @@
                         },
                         {                     
                            pitch: -2.170076175955597, yaw: -1.3972462231599962,
-                            type: 'info',
+                            type: 'scene',
                             createTooltipFunc: createTooltip,
                             createTooltipArgs: {
                                 type: 'Water Filter',
@@ -1535,30 +1564,226 @@
             initializeGraph(viewer.getConfig().scenes);
         });
 
-        // Update current location and refresh path display
-        function updateCurrentLocation(input) {
-            const sceneId = getSceneIdFromName(input);
-            if (sceneId && viewer.getConfig().scenes[sceneId]) {
-                viewer.loadScene(sceneId);
-                const endInput = document.getElementById('endLocation').value.trim();
-                const endSceneId = getSceneIdFromName(endInput);
-                if (endSceneId && viewer.getConfig().scenes[endSceneId]) {
-                    const path = bfs(sceneId, endSceneId);
-                    if (path) {
-                        displayPath(path);
-                    }
-                }
-            } else if (input.trim()) {
-                alert('Invalid location. Please enter a valid location (e.g., scene1, OS Lab, Trash)');
-            }
-        }
-
         function exitPage() {
           if (confirm("Are you sure you want to exit?")) {
             window.location.href = "../../index.html";
           }
         }
 
+        function showNavigationDialog() {
+            const dialogHTML = `
+                <div class="dialog-overlay">
+                    <div class="dialog-box">
+                        <h3>Navigation Options</h3>
+                        <div id="navigationInputs">
+                            <input type="text" id="startLocation" placeholder="Current location" list="locations">
+                            <input type="text" id="endLocation" placeholder="Destination" list="locations">
+                            <datalist id="locations">
+                                ${generateLocationsList()}
+                            </datalist>
+                            <button onclick="startNavigation()" style="width: 100%; margin-top: 5px; background: #2196F3; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
+                                Start Navigation
+                            </button>
+                        </div>
+                        <button onclick="showAvailableLocations()" style="width: 100%; margin-top: 5px; background: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 4px;">
+                            Show All Locations
+                        </button>
+                        <div id="locationInfo" style="margin-top: 10px; font-size: 11px; color: #666;">
+                            <p style="margin: 0;"><strong>Wander Mode Active</strong></p>
+                            <p style="margin: 5px 0;">Click hotspots to explore or use navigation above.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', dialogHTML);
+        }
+
+        function generateLocationsList() {
+            const locations = new Set();
+            for (const scene in sceneNameMapping) {
+                sceneNameMapping[scene].forEach(location => locations.add(location));
+            }
+            return Array.from(locations)
+                .map(location => `<option value="${location}">`)
+                .join('');
+        }
+
+        function showAvailableLocations() {
+            const locations = [];
+            for (const scene in sceneNameMapping) {
+                locations.push(...sceneNameMapping[scene]);
+            }
+            
+            const uniqueLocations = [...new Set(locations)].sort();
+            
+            const locationsHTML = `
+                <div class="dialog-overlay" style="z-index: 1001;">
+                    <div class="dialog-box" style="width: 400px; max-height: 80vh; overflow-y: auto;">
+                        <h3>Available Locations</h3>
+                        <div style="margin: 10px 0;">
+                            ${uniqueLocations.map(location => `
+                                <div style="padding: 5px; border-bottom: 1px solid #eee;">
+                                    ${location}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', locationsHTML);
+        }
+
+        function startNavigation() {
+            const startLocation = document.getElementById('startLocation').value.trim();
+            const endLocation = document.getElementById('endLocation').value.trim();
+            
+            if (!startLocation || !endLocation) {
+                alert('Please enter both current location and destination');
+                return;
+            }
+            
+            const startSceneId = getSceneIdFromName(startLocation);
+            const endSceneId = getSceneIdFromName(endLocation);
+
+            if (!startSceneId) {
+                alert(`Could not find "${startLocation}". Please check the available locations list.`);
+                return;
+            }
+
+            if (!endSceneId) {
+                alert(`Could not find "${endLocation}". Please check the available locations list.`);
+                return;
+            }
+
+            const path = bfs(startSceneId, endSceneId);
+
+            if (!path) {
+                alert(`No path found between ${startLocation} and ${endLocation}. Please try different locations.`);
+                return;
+            }
+
+            // Remove dialog
+            document.querySelector('.dialog-overlay').remove();
+
+            // Store the target location for checking
+            window.targetLocation = endLocation.toLowerCase();
+
+            // Start navigation
+            navigatePath(path);
+        }
+
+        function checkForTargetHotspot(scene) {
+            const hotspots = scene.hotSpots || [];
+            for (const hotspot of hotspots) {
+                if (hotspot.createTooltipArgs) {
+                    const hotspotText = hotspot.createTooltipArgs.text.toLowerCase();
+                    const hotspotHoverText = (hotspot.createTooltipArgs.hoverText || '').toLowerCase();
+                    
+                    if (hotspotText.includes(window.targetLocation) || 
+                        hotspotHoverText.includes(window.targetLocation)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function navigatePath(path) {
+            let currentIndex = 0;
+
+            function highlightNextScene() {
+                if (currentIndex < path.length - 1) {
+                    const currentScene = path[currentIndex];
+                    const nextScene = path[currentIndex + 1];
+                    
+                    // Load current scene
+                    viewer.loadScene(currentScene);
+                    
+                    // Check if current scene has the target hotspot
+                    const currentSceneConfig = viewer.getConfig().scenes[currentScene];
+                    if (checkForTargetHotspot(currentSceneConfig)) {
+                        showDestinationReachedMessage();
+                        return;
+                    }
+                    
+                    // Highlight hotspot leading to next scene
+                    const hotspots = currentSceneConfig.hotSpots;
+                    
+                    hotspots.forEach((hotspot, index) => {
+                        if (hotspot.type === 'scene' && hotspot.sceneId === nextScene) {
+                            // Set viewer orientation to face the hotspot
+                            viewer.lookAt(hotspot.pitch, hotspot.yaw);
+                            
+                            setTimeout(() => {
+                                const hotspotElement = document.querySelector(`.pnlm-hotspot:nth-child(${index + 1})`);
+                                if (hotspotElement) {
+                                    hotspotElement.classList.add('highlight');
+                                    hotspotElement.style.transform = 'scale(1.2)';
+                                    hotspotElement.style.border = '3px solid #2196F3';
+                                }
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    // Check final scene for target hotspot
+                    const finalScene = viewer.getConfig().scenes[path[path.length - 1]];
+                    if (checkForTargetHotspot(finalScene)) {
+                        showDestinationReachedMessage();
+                    }
+                }
+            }
+
+            // Listen for scene changes
+            viewer.on('scenechange', () => {
+                currentIndex++;
+                if (currentIndex < path.length) {
+                    setTimeout(highlightNextScene, 1000);
+                }
+            });
+
+            // Start with first scene
+            highlightNextScene();
+        }
+
+        function showDestinationReachedMessage() {
+            const messageHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(255, 255, 255, 0.9);
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    z-index: 1000;
+                    text-align: center;
+                ">
+                    <h3 style="margin: 0 0 10px 0;">You have reached ${window.targetLocation}!</h3>
+                    <button onclick="this.parentElement.remove(); delete window.targetLocation;" style="
+                        background: #4CAF50;
+                        color: white;
+                        border: none;
+                        padding: 8px 15px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    ">OK</button>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', messageHTML);
+        }
+
+        function startWanderMode() {
+            // Remove any existing navigation overlay
+            const existingOverlay = document.querySelector('.dialog-overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+            
+            // Show the navigation dialog as a side panel
+            showNavigationDialog();
+        }
 
     </script>
 
@@ -1579,6 +1804,9 @@
           loadingScreen.style.display = 'none';
         }, 500);
       }, 500); // Short delay for visual effect (optional)
+      
+      // Start directly in wander mode instead of showing the navigation dialog
+      setTimeout(startWanderMode, 1000);
     });
   </script>
 
