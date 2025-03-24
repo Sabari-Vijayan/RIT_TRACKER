@@ -19,7 +19,7 @@ Navigating the campus can be confusing for students and visitors, especially whe
 - **Hosting**: GitHub Pages  
 
 ## 🔗 Live Demo  
-Check out the project here: [RIT Tracker (GitHub Pages)](https://sabari-vijayan.github.io/TECH_THRIVE_HACKATHON/)  
+Check out the project here: [RIT Tracker (GitHub Pages)](https://sabari-vijayan.github.io/RIT_TRACKER/)  
 
 ## 📈 Future Plans  
 - Expanding the **3D indoor view** to cover all campus buildings.  

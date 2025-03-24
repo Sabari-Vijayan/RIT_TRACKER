@@ -155,7 +155,7 @@ body{
 .thumbnail {
   position: absolute;
   bottom: 50px;
-  left: 50%;
+  left: 57%;
   width: max-content;
   z-index: 100;
   display: flex;
